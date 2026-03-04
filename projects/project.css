@@ -1,0 +1,83 @@
+/* Project page specific styles */
+.project-main {
+  padding: 8rem 3rem 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.back-link {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-bottom: 3rem;
+  transition: color var(--transition);
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+.project-content {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.project-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.project-category-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.project-hero {
+  margin-bottom: 3rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.project-hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.project-body h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 2rem 0 0.75rem;
+}
+
+.project-body p {
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.project-link {
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity var(--transition);
+}
+
+.project-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
