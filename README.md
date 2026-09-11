@@ -1,51 +1,51 @@
 # Arnav Kothari - Personal Portfolio
 
-A simple, aesthetic portfolio built with HTML, CSS, and JavaScript.
+A simple, light-themed portfolio built with plain HTML, CSS, and JavaScript.
+No build step. Everything is driven by one data file.
 
 ## Structure
 
 ```
-├── index.html          # Main page (intro, about, skills, projects)
-├── styles.css          # Global styles
-├── script.js           # Project rendering + scroll animations
-├── projects/           # Individual project pages
-│   ├── project.css     # Project page styles
-│   ├── project-template.html  # Copy this for new projects
-│   ├── eclipse-interactive.html
-│   ├── neon-noir.html
-│   └── project-three.html
-└── assets/             # Put your project images here (optional)
+├── index.html          # Home: intro + project tile grid (3 columns)
+├── styles.css          # Global styles (light theme)
+├── script.js           # Renders the tile grid + intro conveyor
+├── projects-data.js    # <-- THE ONLY FILE YOU EDIT TO ADD PROJECTS
+├── projects/
+│   ├── project.html    # One generic detail page for every project
+│   ├── project.js      # Reads ?id= and renders overview / gallery / timeline
+│   └── project.css     # Detail + timeline styles
+└── assets/
+    ├── logos/          # Tool-belt logos on the intro conveyor
+    └── projects/       # Put each project's images here (one folder per project)
 ```
 
-## Adding a New Project
+## Adding or updating a project
 
-### 1. Add to the projects grid (index page)
+Open **`projects-data.js`** and edit the `window.PROJECTS` list. That's it —
+the home-page tile, the detail page, the picture gallery, and the timeline all
+generate from that entry.
 
-Edit `script.js` and add a new object to the `projects` array:
+1. Copy one whole `{ ... }` block (including the trailing comma).
+2. Paste it into the list and change the fields.
+3. `id` must be unique and URL-safe (letters, numbers, dashes). It becomes the
+   page URL: `projects/project.html?id=your-id`.
+4. Image paths are written **relative to the site root**, e.g.
+   `assets/projects/your-id/hero.jpg`. Any `https://` URL works too.
+5. Drop the images in `assets/projects/your-id/`.
 
-```javascript
-{
-  name: "Your Project Name",
-  category: "UI/UX Design",  // or "Web Development", "Identity Design", etc.
-  thumbnail: "assets/your-project-thumb.jpg",  // or full URL
-  link: "projects/your-project.html"
-}
-```
+Optional fields (`category`, `hero`, `overview`, `gallery`, `links`, `timeline`)
+can be left empty and simply won't render. The field reference is in the comment
+at the top of `projects-data.js`.
 
-### 2. Create the project page
+### Timeline
 
-Copy `projects/project-template.html` to `projects/your-project.html` and fill in the content (title, description, images, links).
+Each project can have a `timeline` list. On the detail page a **View Timeline**
+button reveals it. Every entry is a paragraph (or paragraphs) on the left with
+its pictures on the right (they stack on mobile).
 
-## Running Locally
-
-Open `index.html` in a browser, or use a simple server:
+## Running locally
 
 ```bash
-# Python 3
 python -m http.server 8000
-
-# Node (npx)
-npx serve
+# then open http://localhost:8000
 ```
-
-Then visit http://localhost:8000

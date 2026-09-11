@@ -1,17 +1,42 @@
 /* ===== CSS Variables ===== */
 :root {
-  --bg-dark: #0a0a0a;
-  --bg-card: #141414;
-  --text-primary: #f5f5f5;
-  --text-secondary: #a0a0a0;
-  --accent: #6b7fff;
-  --accent-glow: rgba(107, 127, 255, 0.4);
-  --border: #2a2a2a;
-  
-  /* Typography - JetBrains Mono terminal/coding font */
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  
+  /* Light theme (default) */
+  --bg: #fafafa;
+  --bg-soft: #f1f1f3;
+  --bg-card: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #5f5f66;
+  --accent: #4a5cff;
+  --accent-soft: rgba(74, 92, 255, 0.12);
+  --accent-glow: rgba(74, 92, 255, 0.18);
+  --border: #e6e6e6;
+  --border-strong: #d5d5d5;
+  --dot: rgba(0, 0, 0, 0.05);
+  --header-bg: rgba(255, 255, 255, 0.72);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
   --transition: 0.2s ease;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0e0e10;
+  --bg-soft: #17171b;
+  --bg-card: #161619;
+  --text-primary: #f2f2f4;
+  --text-secondary: #9a9aa4;
+  --accent: #7d8cff;
+  --accent-soft: rgba(125, 140, 255, 0.16);
+  --accent-glow: rgba(125, 140, 255, 0.32);
+  --border: #26262b;
+  --border-strong: #35353c;
+  --dot: rgba(255, 255, 255, 0.05);
+  --header-bg: rgba(16, 16, 19, 0.72);
+  --shadow-md: 0 10px 34px rgba(0, 0, 0, 0.5);
 }
 
 /* ===== Reset & Base ===== */
@@ -26,30 +51,27 @@ html {
 }
 
 body {
-  font-family: var(--font-mono);
-  background-color: var(--bg-dark);
+  font-family: var(--font-sans);
+  background-color: var(--bg);
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition), color var(--transition);
 }
 
-/* Dot grid + soft glow background - more prominent */
+/* Subtle dot grid + soft accent glow background */
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(107, 127, 255, 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 80% 80%, rgba(107, 127, 255, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 50% 50%, rgba(107, 127, 255, 0.04) 0%, transparent 70%),
-    radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 20px 20px;
-  background-position: 0 0, 0 0, 0 0, 0 0;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 15%, var(--accent-soft) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, var(--accent-soft) 0%, transparent 40%),
+    radial-gradient(var(--dot) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 22px 22px;
   pointer-events: none;
   z-index: 0;
 }
@@ -65,12 +87,12 @@ main {
   justify-content: space-between;
   align-items: center;
   padding: 0.9rem 3rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(45, 45, 55, 0.35);
+  background: var(--header-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 100;
@@ -91,12 +113,12 @@ main {
 }
 
 .logo:hover {
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 .logo-icon {
   font-size: 0.7rem;
-  opacity: 0.9;
+  color: var(--accent);
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -105,20 +127,60 @@ main {
 
 .nav {
   display: flex;
+  align-items: center;
   gap: 2rem;
 }
 
 .nav a {
-  color: var(--text-primary);
+  color: var(--text-secondary);
   text-decoration: none;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.2em;
-  transition: opacity var(--transition);
+  transition: color var(--transition);
 }
 
 .nav a:hover {
-  opacity: 0.7;
+  color: var(--text-primary);
+}
+
+/* ===== Theme Toggle ===== */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Show the moon in light mode, the sun in dark mode */
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
 }
 
 /* ===== Sections Base ===== */
@@ -138,7 +200,6 @@ main {
   padding-top: 4rem;
 }
 
-/* Intro takes full viewport - About Me starts below the fold */
 .intro-section + .section {
   padding-top: 4rem;
 }
@@ -157,11 +218,12 @@ main {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(107, 127, 255, 0.3) 20%,
-    rgba(107, 127, 255, 0.5) 50%,
-    rgba(107, 127, 255, 0.3) 80%,
+    var(--accent-soft) 20%,
+    var(--accent) 50%,
+    var(--accent-soft) 80%,
     transparent 100%
   );
+  opacity: 0.6;
 }
 
 /* ===== Intro Section ===== */
@@ -182,17 +244,18 @@ main {
 
 .main-title {
   font-size: clamp(3rem, 10vw, 6rem);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   margin-bottom: 1.5rem;
 }
 
 .description {
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
-  max-width: 500px;
+  max-width: 620px;
   margin: 0 auto 2rem;
+  line-height: 1.75;
 }
 
 /* ===== Logo Conveyor Belt ===== */
@@ -202,20 +265,8 @@ main {
   margin: 0 auto 2.5rem;
   padding: 1.25rem 0;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    black 8%,
-    black 92%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    black 8%,
-    black 92%,
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
 .logo-conveyor {
@@ -251,8 +302,7 @@ main {
 .logo-icon {
   height: 56px;
   width: auto;
-  opacity: 0.85;
-  filter: brightness(1.1);
+  opacity: 0.9;
   transition: opacity var(--transition);
 }
 
@@ -271,7 +321,8 @@ main {
 
 .logo-label {
   margin-top: 0.5rem;
-  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   letter-spacing: 0.12em;
   color: var(--text-secondary);
 }
@@ -310,10 +361,11 @@ main {
   gap: 0.5rem;
   padding: 0.9rem 1.75rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
   text-decoration: none;
   border-radius: 8px;
+  cursor: pointer;
   transition: all var(--transition);
 }
 
@@ -324,22 +376,22 @@ main {
 }
 
 .btn-primary {
-  color: var(--text-primary);
+  color: #fff;
   border: 1px solid var(--accent);
-  background: rgba(107, 127, 255, 0.15);
-  box-shadow: 0 0 30px var(--accent-glow);
+  background: var(--accent);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 .btn-primary:hover {
-  background: rgba(107, 127, 255, 0.25);
-  box-shadow: 0 0 40px var(--accent-glow);
+  filter: brightness(1.05);
+  box-shadow: 0 10px 30px var(--accent-glow);
   transform: translateY(-2px);
 }
 
 .btn-outline {
   color: var(--text-primary);
-  border: 1px solid var(--border);
-  background: transparent;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-card);
 }
 
 .btn-outline:hover {
@@ -350,9 +402,10 @@ main {
 
 /* ===== Section Titles ===== */
 .section-title {
-  font-family: var(--font-mono);
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   margin-bottom: 2rem;
 }
 
@@ -364,43 +417,14 @@ main {
 .about-section {
   align-items: center;
   text-align: center;
-  max-width: 800px;
+  max-width: 760px;
   margin: 0 auto;
 }
 
 .about-text {
   font-size: 1.1rem;
   color: var(--text-secondary);
-  line-height: 1.8;
-}
-
-/* ===== Skills Section ===== */
-.skills-section {
-  align-items: center;
-}
-
-.skills-list {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem 2rem;
-}
-
-.skills-list li {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  border-radius: 8px;
-  transition: all var(--transition);
-}
-
-.skills-list li:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  line-height: 1.85;
 }
 
 /* ===== Projects Section ===== */
@@ -415,134 +439,137 @@ main {
 
 .projects-intro {
   color: var(--text-secondary);
-  max-width: 600px;
+  max-width: 640px;
   margin: 0 auto 3rem;
   text-align: center;
+  line-height: 1.75;
 }
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.9rem;
   width: 100%;
-  max-width: 760px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 /* ===== Project Tile ===== */
 .project-tile {
-  display: block;
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 
 .project-tile:hover {
   border-color: var(--accent);
   transform: translateY(-4px);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-md);
 }
 
-.project-tile:hover .project-arrow {
-  opacity: 1;
-  transform: translate(0, 0);
+.project-thumb-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--bg-soft);
 }
 
 .project-thumbnail {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform var(--transition);
 }
 
 .project-tile:hover .project-thumbnail {
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 
 .project-info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.15rem 1.3rem 1.35rem;
   text-align: left;
 }
 
-.project-info > div {
-  flex: 1;
-  min-width: 0;
-}
-
 .project-name {
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .project-category {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.66rem;
   letter-spacing: 0.1em;
-  color: var(--text-primary);
-  margin-top: 0.2rem;
-  opacity: 0.9;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-top: 0.4rem;
 }
 
 .project-arrow {
-  width: 24px;
-  height: 24px;
-  opacity: 0.7;
-  transition: all var(--transition);
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  transition: color var(--transition), transform var(--transition);
 }
 
 .project-tile:hover .project-arrow {
-  opacity: 1;
+  color: var(--accent);
+  transform: translate(2px, -2px);
 }
 
-/* Arrow icon (external link) */
 .project-arrow svg {
   width: 100%;
   height: 100%;
-  stroke: var(--text-primary);
+  stroke: currentColor;
 }
 
 /* ===== Responsive ===== */
+@media (max-width: 1000px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 800px;
+  }
+}
+
 @media (max-width: 768px) {
   .header {
     padding: 1rem 1.5rem;
   }
-  
+
   .nav {
     gap: 1rem;
   }
-  
+
   .nav a {
     font-size: 0.65rem;
   }
-  
+
   .intro-buttons {
     flex-direction: column;
   }
-  
+
   .section {
     padding: 4rem 1.5rem;
   }
-  
+
   .section + .section {
     padding-top: 3rem;
   }
-  
+}
+
+@media (max-width: 560px) {
   .projects-grid {
     grid-template-columns: 1fr;
     padding: 0;

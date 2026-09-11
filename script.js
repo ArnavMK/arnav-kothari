@@ -1,31 +1,11 @@
 /**
- * Portfolio Script
- * - Renders project tiles from the projects array (easy to add new ones!)
+ * Portfolio Script (home page)
+ * - Renders project tiles from window.PROJECTS (see projects-data.js)
+ * - Renders the intro tool-belt conveyor
  * - Scroll-triggered fade-in animations
- * - Hover effects are in CSS
+ *
+ * To add a project you only edit projects-data.js — never this file.
  */
-
-// ===== PROJECTS DATA - Add new projects here! =====
-const projects = [
-  {
-    name: "Eclipse Interactive",
-    category: "UI/UX Design",
-    thumbnail: "https://placehold.co/600x400/1a1a1a/666?text=Eclipse+Interactive",
-    link: "projects/eclipse-interactive.html"
-  },
-  {
-    name: "Neon Noir",
-    category: "Identity Design",
-    thumbnail: "https://placehold.co/600x400/1a1a1a/666?text=Neon+Noir",
-    link: "projects/neon-noir.html"
-  },
-  {
-    name: "Project Three",
-    category: "Web Development",
-    thumbnail: "https://placehold.co/600x400/1a1a1a/666?text=Project+3",
-    link: "projects/project-three.html"
-  }
-];
 
 // ===== TOOL BELT (Intro Conveyor) - Add/remove items here =====
 // Put your logo files in: assets/logos/
@@ -41,24 +21,32 @@ const toolbelt = [
   { name: "C#", fileBase: "csharp" }
 ];
 
+// Normalise Windows-style backslashes so paths pasted from a file explorer work.
+const normalizePath = (path) => String(path || "").replace(/\\/g, "/");
+
 // ===== Render Project Tiles =====
 function renderProjects() {
   const grid = document.getElementById("projects-grid");
   if (!grid) return;
 
+  const projects = window.PROJECTS || [];
+
   grid.innerHTML = projects
     .map(
       (project) => `
-    <a href="${project.link}" class="project-tile">
-      <img 
-        src="${project.thumbnail}" 
-        alt="${project.name}" 
-        class="project-thumbnail"
-      />
+    <a href="projects/project.html?id=${encodeURIComponent(project.id)}" class="project-tile">
+      <div class="project-thumb-wrap">
+        <img
+          src="${normalizePath(project.thumbnail)}"
+          alt="${project.title}"
+          class="project-thumbnail"
+          loading="lazy"
+        />
+      </div>
       <div class="project-info">
         <div>
-          <div class="project-name">${project.name}</div>
-          <div class="project-category">${project.category}</div>
+          <div class="project-name">${project.title}</div>
+          ${project.category ? `<div class="project-category">${project.category}</div>` : ""}
         </div>
         <span class="project-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
