@@ -54,9 +54,9 @@ window.PROJECTS = [
   {
     id: "Mathcraft",
     title: "Mathcraft",
-    category: "Web Dev / Mathematics",
+    category: "Graphing Calculator",
     thumbnail: "assets\\projects\\Mathcraft\\thumb.png",
-    hero: "https://placehold.co/1400x700/eeeeee/999?text=Mathcraft",
+    hero: "assets\\projects\\Mathcraft\\hero.png",
     overview: [
       "Mathcraft is a web based graphing calculator inspired by the likes of Desmos, GeoGebra and SolidWorks.",
       `Its designed to be a simple and easy to use calculator that can help visulise leaving cert mathematics concpets. 
@@ -70,22 +70,23 @@ window.PROJECTS = [
       "A search bar for searching the commands.",
     ],
     gallery: [
-      "https://placehold.co/900x600/eeeeee/999?text=Screenshot+1",
-      "https://placehold.co/900x600/eeeeee/999?text=Screenshot+2",
-      "https://placehold.co/900x600/eeeeee/999?text=Screenshot+3"
+      "assets\\projects\\Mathcraft\\1.png",
+      "assets\\projects\\Mathcraft\\2.png",
+      "assets\\projects\\Mathcraft\\3.png",
     ],
     links: [
       { label: "Live Demo", url: "https://example.com" },
       { label: "GitHub", url: "https://github.com/ArnavMK" }
     ],
+    timeline: []
   },
 
   {
-    id: "neon-noir",
-    title: "Neon Noir",
-    category: "Identity Design",
-    thumbnail: "https://placehold.co/800x600/eeeeee/999?text=Neon+Noir",
-    hero: "https://placehold.co/1400x700/eeeeee/999?text=Neon+Noir",
+    id: "ashi",
+    title: "Ashi",
+    category: "Bluetooth Powered MIDI Footswitch Pedal",
+    thumbnail: "https://placehold.co/800x600/eeeeee/999?text=Ashi",
+    hero: "https://placehold.co/1400x700/eeeeee/999?text=Ashi",
     overview: [
       "Replace this with the story of the project."
     ],
@@ -95,10 +96,10 @@ window.PROJECTS = [
   },
 
   {
-    id: "project-three",
-    title: "Project Three",
-    category: "Web Development",
-    thumbnail: "https://placehold.co/800x600/eeeeee/999?text=Project+3",
+    id: "ceol",
+    title: "Ceol",
+    category: "Telemetry Sonification Payload",
+    thumbnail: "https://placehold.co/800x600/eeeeee/999?text=Ceol",
     hero: "",
     overview: [
       "Replace this with the story of the project."
@@ -111,14 +112,13 @@ window.PROJECTS = [
   {
     id: "wave-forge",
     title: "Wave forge",
-    category: "Embedded Systems",
+    category: "Custom Solid State Guitar Amplifier",
     thumbnail: "assets\\projects\\wave-forge\\thumb.png",
     hero: "assets\\projects\\wave-forge\\hero.png",
     overview: [
       `Wave Forge is a custom Solid State Amplifier made from Scratch! Including all the hardware and firmware. 
       This is a multi board feature dense guitar amplifier, I made this project to combine all the tools and software i 
       use to get my guitar tone into one singular device,`,
-
       ""
     ],
     gallery: [
@@ -134,14 +134,26 @@ window.PROJECTS = [
 
   {
     id: "ground-station",
-    title: "Ground Station",
-    category: "Embedded Systems",
+    title: "HiPRDeck",
+    category: "Ground Station Suite for all things rocket.",
     thumbnail: "assets\\projects\\ground-station\\thumb.png",
     hero: "assets\\projects\\ground-station\\hero.png",
     overview: [
-      "Replace this with the story of the project."
+      "We've spent the last couple of months building a ground station suite that receives and displays telemetry from HiPR's flight computers: Ogma, Eggtimer, Vega and a lot more to come!",
+      "The suite has two parts: Gameboy, a handheld receiver unit, and CyberDeck, the central display station they all connect back to.",
+      "The Gameboy is built around an Adafruit KB2040 with a modular cartridge system. A cartridge is a small daughterboard tailored to one flight computer's radio protocol, so the same handheld mainboard can receive from completely different systems just by hot-swapping the cartridge:",
+      "Ogma cartridge — SPI-direct to a LoRa module, matching Ogma's own transceiver.",
+      "Eggtimer cartridge — a self-contained Eggfinder RX module, UART out.",
+      "Vega cartridge — our newest build: a custom PCB around a bare STM32G071 and a Semtech SX1280, with open source telemetry firmware from CATS Vega themselves.",
+      "Each Gameboy has its own small screen and battery, and can be used completely standalone in the field for a quick read on a single flight computer.",
+      "The CyberDeck is a Raspberry Pi 5 with a touchscreen, running a custom dashboard we built from scratch, fitted into a NANUK case for the looks. Multiple Gameboys connect to the CyberDeck at once via the Toaster, a USB hub and charging distribution board that lets several units plug in simultaneously — each showing up as its own independent tab on screen automatically, all through just one port on the Pi 5.",
+      "The whole point of building this modular is that it never has to be \"finished\" — every new requirement just becomes another plug-and-play piece rather than a massive rebuild. For example, we're working on a live video streaming module that will plug into the CyberDeck like any other Gameboy."
     ],
-    gallery: [],
+    gallery: [
+      "assets\\projects\\ground-station\\gameboy_front.jpeg",
+      "assets\\projects\\ground-station\\gameboy_zoomes.jpeg",
+      "assets\\projects\\ground-station\\cartridges.jpeg"
+    ],
     links: [],
     timeline: []
   }
