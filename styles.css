@@ -47,6 +47,9 @@
 }
 
 html {
+  /* Scales every rem-based size (most of the site's type/spacing) down
+     uniformly, so 100% browser zoom reads about like 85% used to. */
+  font-size: 87.5%;
   scroll-behavior: smooth;
 }
 
@@ -149,8 +152,8 @@ main {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   border: 1px solid var(--border-strong);
   border-radius: 8px;
@@ -166,8 +169,8 @@ main {
 }
 
 .theme-toggle svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 /* Show the moon in light mode, the sun in dark mode */
@@ -294,13 +297,13 @@ main {
 }
 
 .logo-icon-wrap {
-  min-height: 56px;
+  min-height: 49px;
   display: grid;
   place-items: center;
 }
 
 .logo-icon {
-  height: 56px;
+  height: 49px;
   width: auto;
   opacity: 0.9;
   transition: opacity var(--transition);
@@ -370,8 +373,8 @@ main {
 }
 
 .btn-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
 }
 
@@ -517,8 +520,8 @@ main {
 }
 
 .project-arrow {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
   color: var(--text-secondary);
   transition: color var(--transition), transform var(--transition);

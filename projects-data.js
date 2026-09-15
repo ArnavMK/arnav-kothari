@@ -51,6 +51,10 @@
    ============================================================================= */
 
 window.PROJECTS = [
+
+  // ==========================================================================
+  // MATHCRAFT - WEB BASED GRAPHING CALCULATOR
+  // ==========================================================================
   {
     id: "Mathcraft",
     title: "Mathcraft",
@@ -81,6 +85,10 @@ window.PROJECTS = [
     timeline: []
   },
 
+
+  // ==========================================================================
+  // ASHI - BLUETOOTH POWERED MIDI FOOTSWITCH PEDAL
+  // ==========================================================================
   {
     id: "ashi",
     title: "Ashi",
@@ -95,6 +103,10 @@ window.PROJECTS = [
     timeline: []
   },
 
+
+  // ==========================================================================
+  // CEOL - TELEMETRY SONIFICATION PAYLOAD
+  // ==========================================================================
   {
     id: "ceol",
     title: "Ceol",
@@ -109,6 +121,12 @@ window.PROJECTS = [
     timeline: []
   },
 
+
+
+
+  // ==========================================================================
+  // WAVE FORGE - CUSTOM SOLID STATE GUITAR AMPLIFIER
+  // ==========================================================================
   {
     id: "wave-forge",
     title: "Wave forge",
@@ -132,6 +150,9 @@ window.PROJECTS = [
     timeline: []
   },
 
+  // ==========================================================================
+  // GROUND STATION SUITE FOR ALL THINGS ROCKET
+  // ==========================================================================
   {
     id: "ground-station",
     title: "HiPRDeck",
@@ -155,6 +176,67 @@ window.PROJECTS = [
       "assets\\projects\\ground-station\\cartridges.jpeg"
     ],
     links: [],
-    timeline: []
+    timeline: [
+      {
+        date: "Spetember 2026",
+        title: "Aquired Radio Module And Completed The Vega Cartrdige Hardware Section",
+        text: [
+          "Early September I got the vega cartidge boards from JLCPCB delivered to my door. And components a few days later. Unfortunately teh radio module was misplaced by digikey. But nonethless i soldered the vega board with remaining compoenents and got the stm32 flashable.",
+          "14 September I aquired the Semtech SX1280 radio module and completed the hardware section of the Vega Cartrdige. The Vega Cartrdige is a custom PCB that has a STM32G071 and the SX1280 radio module. The Vega Cartrdige is designed to receive telemetry from the CATS Vega flight computer.",
+          "Having complelted the hardware assembly next step was to start debugging it. I have found that the UART lines were not switched. Other checks include seeing the voltage on the UART TX line to be 3.3V, radio is getting power, Busy pin is held low indicating that the radio is configured. ",
+          "All of these checks are yet to be completed"
+        ],
+        images: [
+          { src: "assets\\projects\\ground-station\\Timeline\\vega_boards.jpg", title: "Bare Vega Cartridge boards from JLCPCB" },
+          { src: "assets\\projects\\ground-station\\Timeline\\vega_box.jpg", title: "Parts order arriving" },
+          { src: "assets\\projects\\ground-station\\Timeline\\vega_solderd.jpg", title: "STM32G071 + SX1280 hand-soldered" }
+        ]
+      },
+
+      {
+        date: "August 2026",
+        title: "Vega Design and CyberDeck Firmware And Hardware assembly",
+        text: [
+          "for the upcoming two stage rocket we needed to get this ground station finished and working. The two stage uses two CATS-VEGA flight computers hecne i decided to make a cartidge for that so that our ground station would be compatible with it.",
+          "the Vega Cartdige consists of a STM32G071 mcu and semtec SX1280 radio module. Its the exact same framework as the actual cats vega ground station. Radio talks to the stm through SPI and stm talks to the pi pico through UART, just like the egtimer cartdige",
+          "Paralel to this i was wokring on the electronics and firmware setup for the toaster and the cyber deck. I booted up rasberry pi5 into a bookworm OS and made the application for the ui for the screen. Most of the development was done through puTTY and remote ssh since i did not have the screen or the cabel",
+          "I was abel to start a local server on the pi and access it through my laptop. Hence finishing hte user interface. Then I setup the port system for the gameboy which generated a fake data source to test the chain without needing an actual flight computer or a gameboy connectoed to the pi",
+          "Eventually i got the screen and the cable and tested the UI on the screen thorugh the pi5. This revealed a problem that the UPS used for powering the pi5 is not strong enough. It only deos 5V at 3A where as the pi5 needs 5A for full operation. Hence we might need to switch to antoher UPS to generate enough power or else this will cause issues when there are lot of peripherals connected"
+        ],
+        images: [
+          { src: "assets\\projects\\ground-station\\Timeline\\vega_kicad_pcb.png", title: "Vega Kicad PCB" },
+          { src: "assets\\projects\\ground-station\\Timeline\\pi5.jpg", title: "Raspberry Pi 5" },
+          { src: "assets\\projects\\ground-station\\Timeline\\anotherui.jpg", title: "UI Design" }
+        ]
+      },
+
+      {
+        date: "April 2026",
+        title: "Designed and assembled The SPI and Eggtimer Cartridges",
+        text: [
+          "Since this project is following the inspiration of a GameBoy and its game cartridges, I made two radio cartridges for our ground station. One for SPI that can comunicate with our custom flight computer being built by another team, and one for the Eggtimer Flight Computer.",
+          "The SPI cartdige is made up of the cartidge connector and a LoRa radio module specifically the RF-LORA-868-SO. The SPI cartidge will be able to receive telemetry from the custom flight computer through SPI.",
+          "The Eggtimer cartidge is made up of the cartidge connector and the Eggfinder RX module that connects by default to thier flight computer.",
+        ],
+        images: [
+          { src: "assets\\projects\\ground-station\\Timeline\\cartridges.jpeg", title: "SPI and Eggtimer Cartridges" },
+          { src: "assets\\projects\\ground-station\\Timeline\\Eggtimer_adapter_pcb.png", title: "Eggtimer Cartidge" },
+          { src: "assets\\projects\\ground-station\\Timeline\\SPI_adapter_pcb.png", title: "SPI Cartidge" },
+        ]
+      },
+
+      {
+        date: "February 2026",
+        title: "Designed Rev 2 Of the Gameboy Main board.",
+        text: [
+          "Rev 2 of the main board follows the GameBoy archetecture more closely, with now a 4 Layer PCB, compoenents moved to back and a dedicated power plane improved the routing quality enormusly",
+          ""
+        ],
+        images: [
+          { src: "assets\\projects\\ground-station\\Timeline\\gameboy_rev2_pcb.png", title: "Gameboy Rev 2 PCB" },
+          { src: "assets\\projects\\ground-station\\Timeline\\gameboy_rev2_assembled.jpeg", title: "Gameboy Rev 2 Assembled" },
+        ]
+      }
+    ]
   }
 ];

@@ -9,6 +9,11 @@
  * (.png/.jpg/.webp/.gif/.svg) OR a video (.mp4/.webm/.ogg/.mov/.m4v).
  * Videos autoplay muted on a loop with no controls; the controls appear only
  * while the pointer is over them.
+ *
+ * CAPTIONS: an image/video entry can also be written as { src, title } to
+ * give it a little caption — e.g. images: [ { src: "...", title: "Vega board
+ * front" }, "assets/plain/still/works.jpg" ]. Plain strings still work,
+ * mixed with captioned ones. Right now captions only render in the timeline.
  */
 
 // Asset paths in projects-data.js are written relative to the site root.
@@ -37,25 +42,56 @@ const toParagraphs = (value) => {
     .join("");
 };
 
-const mediaFrame = (src) => {
+// A media item is either a plain path string, or { src, title } to also
+// show a little caption under it (currently only rendered in the timeline,
+// and only for images — videos don't get one).
+const mediaSrc = (item) => (typeof item === "string" ? item : item.src);
+const mediaTitle = (item) => (typeof item === "object" && item.title) || null;
+
+const mediaFrame = (item, { showCaption = false } = {}) => {
+  const src = mediaSrc(item);
   const url = asset(src);
+  const title = mediaTitle(item);
+
   if (isVideo(src)) {
     return `
-      <div class="media-frame video-frame">
+      <figure class="media-frame video-frame">
         <video src="${url}" autoplay muted loop playsinline preload="metadata"
                disablepictureinpicture controlslist="nodownload noplaybackrate"></video>
-      </div>`;
+      </figure>`;
   }
+
+  const caption = showCaption && title ? `<figcaption class="media-caption">${escapeHtml(title)}</figcaption>` : "";
   return `
-    <a href="${url}" target="_blank" rel="noopener noreferrer" class="media-frame img-frame">
-      <img src="${url}" alt="" loading="lazy">
-    </a>`;
+    <figure class="media-frame img-frame">
+      <a href="${url}" target="_blank" rel="noopener noreferrer">
+        <img src="${url}" alt="${title ? escapeHtml(title) : ""}" loading="lazy">
+      </a>
+      ${caption}
+    </figure>`;
 };
 
-const mediaGrid = (items, className) => {
+const mediaGrid = (items, className, opts) => {
   if (!items || !items.length) return "";
-  return `<div class="${className}">${items.map(mediaFrame).join("")}</div>`;
+  return `<div class="${className}">${items.map((item) => mediaFrame(item, opts)).join("")}</div>`;
 };
+
+/* Timeline images pack into 2 columns by default (see project.css). A
+   clearly landscape photo looks cramped squeezed into one column, so once
+   we know its real dimensions we let it span the full width instead. */
+function wireAdaptiveTimelineImages(root) {
+  root.querySelectorAll(".timeline-images .img-frame").forEach((frame) => {
+    const img = frame.querySelector("img");
+    if (!img) return;
+    const markIfWide = () => {
+      if (img.naturalWidth && img.naturalHeight && img.naturalWidth / img.naturalHeight > 1.2) {
+        frame.classList.add("wide");
+      }
+    };
+    if (img.complete) markIfWide();
+    else img.addEventListener("load", markIfWide);
+  });
+}
 
 /* Show a video's native controls only while the pointer is over it. */
 function wireVideoHoverControls(root) {
@@ -78,13 +114,14 @@ function renderTimeline(timeline) {
     .map(
       (entry) => `
       <div class="timeline-entry">
+        <span class="timeline-dot"></span>
         <div class="timeline-text">
           ${entry.date ? `<div class="timeline-date">${escapeHtml(entry.date)}</div>` : ""}
           ${entry.title ? `<h3>${escapeHtml(entry.title)}</h3>` : ""}
           ${toParagraphs(entry.text)}
         </div>
         <div class="timeline-media">
-          ${mediaGrid(entry.images, "timeline-images")}
+          ${mediaGrid(entry.images, "timeline-images", { showCaption: true })}
         </div>
       </div>`
     )
@@ -95,10 +132,38 @@ function renderTimeline(timeline) {
       View Timeline <span class="chevron">&darr;</span>
     </button>
     <section class="timeline" id="timeline" hidden>
-      <h2 class="timeline-heading">Timeline</h2>
-      ${entries}
+      <div class="timeline-header">
+        <h2 class="timeline-heading">Timeline</h2>
+        <button class="timeline-sort" id="timeline-sort" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v14M8 17 4 13M8 17l4-4M16 21V7M16 7l4 4M16 7l-4 4"/></svg>
+          <span id="timeline-sort-label">Newest first</span>
+        </button>
+      </div>
+      <div class="timeline-entries">
+        ${entries}
+      </div>
     </section>
   `;
+}
+
+/* Long timelines (a project spanning months) get hard to browse — let the
+   viewer flip the order instead of scrolling past everything. Dates are
+   free-text (not parsed), so this just reverses however the entries were
+   authored in projects-data.js. Reordering the existing DOM nodes (rather
+   than re-rendering) keeps any playing videos from restarting. */
+function wireTimelineSort(timelineSection) {
+  const btn = timelineSection.querySelector("#timeline-sort");
+  const label = timelineSection.querySelector("#timeline-sort-label");
+  const list = timelineSection.querySelector(".timeline-entries");
+  if (!btn || !label || !list) return;
+
+  let reversed = false;
+  btn.addEventListener("click", () => {
+    const entries = Array.from(list.querySelectorAll(":scope > .timeline-entry"));
+    entries.reverse().forEach((el) => list.appendChild(el));
+    reversed = !reversed;
+    label.textContent = reversed ? "Oldest first" : "Newest first";
+  });
 }
 
 function renderProject(project) {
@@ -152,6 +217,7 @@ function init() {
   mount.innerHTML = renderProject(project);
 
   wireVideoHoverControls(mount);
+  wireAdaptiveTimelineImages(mount);
 
   const toggle = document.getElementById("timeline-toggle");
   const timeline = document.getElementById("timeline");
@@ -169,6 +235,9 @@ function init() {
         toggle.classList.remove("open");
       }
     });
+  }
+  if (timeline) {
+    wireTimelineSort(timeline);
   }
 }
 

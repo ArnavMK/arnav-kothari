@@ -98,6 +98,22 @@
   transform: translateY(-2px);
 }
 
+/* The clickable wrapper around an image (figures may also hold a caption
+   below, see .media-caption). */
+.media-frame > a {
+  display: block;
+  line-height: 0;
+}
+
+.media-caption {
+  padding: 0.55rem 0.8rem 0.7rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.4;
+}
+
 /* Every media frame (image or video) sits in a fixed-size box, so a
    portrait phone photo or an odd-resolution screenshot ends up the same
    size as everything else instead of blowing the layout up. object-fit:
@@ -124,7 +140,10 @@
   margin: 2.75rem 0;
 }
 
-.project-gallery .media-frame {
+/* aspect-ratio sits on the media itself (not the figure) so a figcaption
+   can sit below without squishing the fixed-ratio image/video box. */
+.project-gallery .media-frame > a,
+.project-gallery .media-frame > video {
   aspect-ratio: 3 / 2;
 }
 
@@ -185,33 +204,125 @@
   border-top: 1px solid var(--border);
 }
 
+.timeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
 .timeline-heading {
   font-family: var(--font-sans);
   font-size: 1.6rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin-bottom: 2.5rem;
+}
+
+/* Sorts by reordering the already-rendered entries client-side (see
+   project.js) — dates are free-text, not parsed, so this just flips
+   whatever order they were authored in. */
+.timeline-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.timeline-sort:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.timeline-sort svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* Vertical rail running down the left of the whole entry list, with a dot
+   on each entry marking its date — the classic timeline look. Sits in the
+   gutter to the left of the entries, outside where the text and the
+   glowing divider start. */
+.timeline-entries {
+  --rail-x: 0.4rem;
+  --dot-size: 10px;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-entries::before {
+  content: "";
+  position: absolute;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  left: var(--rail-x);
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--border) 10%, var(--border) 90%, transparent);
+}
+
+.timeline-dot {
+  position: absolute;
+  top: calc(2.5rem + 0.35rem);
+  left: calc(var(--rail-x) - 2rem - var(--dot-size) / 2);
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--bg), 0 0 10px var(--accent-glow);
+}
+
+.timeline-entry:first-child .timeline-dot {
+  top: 0.35rem;
 }
 
 .timeline-entry {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2.5rem;
-  padding: 2.25rem 0;
-  border-bottom: 1px solid var(--border);
+  padding: 2.5rem 0;
 }
 
-.timeline-entry:last-child {
-  border-bottom: none;
+.timeline-entry:first-child {
+  padding-top: 0;
+}
+
+/* Soft divider between entries so a new block reads as a new block,
+   without a hard line dominating the page. */
+.timeline-entry:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+  box-shadow: 0 0 8px 0 var(--accent-glow);
+  opacity: 0.55;
 }
 
 .timeline-date {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.15em;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 
 .timeline-text h3 {
@@ -228,14 +339,40 @@
   margin-bottom: 0.9rem;
 }
 
+/* One image: full width, natural size. Two or more: pack them into a
+   2-column grid instead of one tall stack, so the image block's height
+   tracks its own content instead of a fixed per-image height that can
+   run on far longer than a short paragraph. */
 .timeline-images {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 1rem;
+  align-items: start;
 }
 
-.timeline-images .media-frame {
-  aspect-ratio: 16 / 10;
+.timeline-images:has(.media-frame:nth-child(2)) {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Photos keep their own aspect ratio — no forced box, so no letterboxing
+   or oversized border when a picture doesn't match a fixed ratio. */
+.timeline-images .img-frame img {
+  height: auto;
+  object-fit: initial;
+}
+
+/* A clearly landscape photo (flagged by project.js once it knows the real
+   dimensions) takes the full row instead of being squeezed into one
+   column — grid auto-placement drops it to its own row on its own. */
+.timeline-images .media-frame.wide {
+  grid-column: 1 / -1;
+}
+
+/* Videos still get a conventional box since the ratio isn't known until
+   they load — set on the <video> itself so a caption can sit below it
+   without squishing the box. */
+.timeline-images .video-frame > video {
+  aspect-ratio: 16 / 9;
 }
 
 /* ===== Responsive ===== */
@@ -247,6 +384,12 @@
 
 @media (max-width: 560px) {
   .project-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline-images:has(.media-frame:nth-child(2)) {
     grid-template-columns: 1fr;
   }
 }
