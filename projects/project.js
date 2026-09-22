@@ -4,77 +4,9 @@
  * (../projects-data.js), and renders the overview, gallery and timeline.
  *
  * You never edit this file to add content — edit projects-data.js.
- *
- * MEDIA: any path in `gallery` or a timeline entry's `images` can be an image
- * (.png/.jpg/.webp/.gif/.svg) OR a video (.mp4/.webm/.ogg/.mov/.m4v).
- * Videos autoplay muted on a loop with no controls; the controls appear only
- * while the pointer is over them.
- *
- * CAPTIONS: an image/video entry can also be written as { src, title } to
- * give it a little caption — e.g. images: [ { src: "...", title: "Vega board
- * front" }, "assets/plain/still/works.jpg" ]. Plain strings still work,
- * mixed with captioned ones. Right now captions only render in the timeline.
+ * Shared media helpers (asset paths, image/video rendering, captions) live
+ * in common.js, loaded before this file.
  */
-
-// Asset paths in projects-data.js are written relative to the site root.
-// This page lives in /projects/, so prefix them with "../".
-// Windows-style backslashes are normalised to forward slashes so paths pasted
-// from a file explorer just work.
-const ROOT = "../";
-const asset = (path) => {
-  const clean = String(path).replace(/\\/g, "/");
-  return /^https?:\/\//.test(clean) ? clean : ROOT + clean.replace(/^\/+/, "");
-};
-
-const VIDEO_RE = /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i;
-const isVideo = (src) => VIDEO_RE.test(String(src));
-
-const escapeHtml = (str) =>
-  String(str).replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-  }[c]));
-
-const toParagraphs = (value) => {
-  const list = Array.isArray(value) ? value : value ? [value] : [];
-  return list
-    .filter((p) => String(p).trim() !== "")
-    .map((p) => `<p>${escapeHtml(p)}</p>`)
-    .join("");
-};
-
-// A media item is either a plain path string, or { src, title } to also
-// show a little caption under it (currently only rendered in the timeline,
-// and only for images — videos don't get one).
-const mediaSrc = (item) => (typeof item === "string" ? item : item.src);
-const mediaTitle = (item) => (typeof item === "object" && item.title) || null;
-
-const mediaFrame = (item, { showCaption = false } = {}) => {
-  const src = mediaSrc(item);
-  const url = asset(src);
-  const title = mediaTitle(item);
-
-  if (isVideo(src)) {
-    return `
-      <figure class="media-frame video-frame">
-        <video src="${url}" autoplay muted loop playsinline preload="metadata"
-               disablepictureinpicture controlslist="nodownload noplaybackrate"></video>
-      </figure>`;
-  }
-
-  const caption = showCaption && title ? `<figcaption class="media-caption">${escapeHtml(title)}</figcaption>` : "";
-  return `
-    <figure class="media-frame img-frame">
-      <a href="${url}" target="_blank" rel="noopener noreferrer">
-        <img src="${url}" alt="${title ? escapeHtml(title) : ""}" loading="lazy">
-      </a>
-      ${caption}
-    </figure>`;
-};
-
-const mediaGrid = (items, className, opts) => {
-  if (!items || !items.length) return "";
-  return `<div class="${className}">${items.map((item) => mediaFrame(item, opts)).join("")}</div>`;
-};
 
 /* Timeline images pack into 2 columns by default (see project.css). A
    clearly landscape photo looks cramped squeezed into one column, so once
@@ -90,20 +22,6 @@ function wireAdaptiveTimelineImages(root) {
     };
     if (img.complete) markIfWide();
     else img.addEventListener("load", markIfWide);
-  });
-}
-
-/* Show a video's native controls only while the pointer is over it. */
-function wireVideoHoverControls(root) {
-  root.querySelectorAll(".video-frame").forEach((frame) => {
-    const video = frame.querySelector("video");
-    if (!video) return;
-    frame.addEventListener("mouseenter", () => video.setAttribute("controls", ""));
-    frame.addEventListener("mouseleave", () => video.removeAttribute("controls"));
-    // Autoplay can be rejected until the page has been interacted with; retry.
-    const tryPlay = () => video.play().catch(() => {});
-    tryPlay();
-    video.addEventListener("loadeddata", tryPlay);
   });
 }
 
@@ -128,10 +46,10 @@ function renderTimeline(timeline) {
     .join("");
 
   return `
-    <button class="timeline-toggle" id="timeline-toggle" aria-expanded="false">
-      View Timeline <span class="chevron">&darr;</span>
+    <button class="timeline-toggle open" id="timeline-toggle" aria-expanded="true">
+      <span id="timeline-toggle-label">Hide Timeline</span> <span class="chevron">&darr;</span>
     </button>
-    <section class="timeline" id="timeline" hidden>
+    <section class="timeline" id="timeline">
       <div class="timeline-header">
         <h2 class="timeline-heading">Timeline</h2>
         <button class="timeline-sort" id="timeline-sort" type="button">
@@ -166,6 +84,53 @@ function wireTimelineSort(timelineSection) {
   });
 }
 
+/* Timeline starts open (it's the interesting part), but the button still
+   toggles it shut and its label/chevron track the current state. */
+function wireTimelineToggle() {
+  const toggle = document.getElementById("timeline-toggle");
+  const toggleLabel = document.getElementById("timeline-toggle-label");
+  const timeline = document.getElementById("timeline");
+  if (!toggle || !timeline) return;
+
+  toggle.addEventListener("click", () => {
+    const open = !timeline.hasAttribute("hidden");
+    if (open) {
+      timeline.setAttribute("hidden", "");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.classList.remove("open");
+      toggleLabel.textContent = "View Timeline";
+    } else {
+      timeline.removeAttribute("hidden");
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.classList.add("open");
+      toggleLabel.textContent = "Hide Timeline";
+      timeline.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+
+  wireTimelineSort(timeline);
+}
+
+/* Deep Dive / Full Gallery are separate pages, so these are just links —
+   only shown when the project actually has that content. */
+function renderProjectActions(project) {
+  const hasDetails = project.details && project.details.length;
+  const hasFullGallery = project.fullGallery && project.fullGallery.length;
+  if (!hasDetails && !hasFullGallery) return "";
+
+  const idParam = encodeURIComponent(project.id);
+  const buttons = [
+    hasDetails
+      ? `<a href="deep-dive.html?id=${idParam}" class="btn btn-outline">Deep Dive &rarr;</a>`
+      : "",
+    hasFullGallery
+      ? `<a href="gallery.html?id=${idParam}" class="btn btn-outline">Full Gallery &rarr;</a>`
+      : ""
+  ].join("");
+
+  return `<div class="project-actions">${buttons}</div>`;
+}
+
 function renderProject(project) {
   const links = (project.links || [])
     .map(
@@ -196,49 +161,23 @@ function renderProject(project) {
 
     ${links ? `<div class="project-links">${links}</div>` : ""}
 
+    ${renderProjectActions(project)}
+
     ${renderTimeline(project.timeline)}
   `;
 }
 
 function init() {
   const mount = document.getElementById("project-content");
-  const id = new URLSearchParams(location.search).get("id");
-  const project = (window.PROJECTS || []).find((p) => p.id === id);
-
-  if (!project) {
-    mount.innerHTML = `
-      <h1 class="project-title">Project not found</h1>
-      <p class="project-body">No project matches this link. <a href="../index.html#projects" class="project-link">Back to projects</a>.</p>
-    `;
-    return;
-  }
+  const project = findProjectOrShowError(mount);
+  if (!project) return;
 
   document.title = `${project.title} - Arnav Kothari`;
   mount.innerHTML = renderProject(project);
 
   wireVideoHoverControls(mount);
   wireAdaptiveTimelineImages(mount);
-
-  const toggle = document.getElementById("timeline-toggle");
-  const timeline = document.getElementById("timeline");
-  if (toggle && timeline) {
-    toggle.addEventListener("click", () => {
-      const open = timeline.hasAttribute("hidden");
-      if (open) {
-        timeline.removeAttribute("hidden");
-        toggle.setAttribute("aria-expanded", "true");
-        toggle.classList.add("open");
-        timeline.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        timeline.setAttribute("hidden", "");
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.classList.remove("open");
-      }
-    });
-  }
-  if (timeline) {
-    wireTimelineSort(timeline);
-  }
+  wireTimelineToggle();
 }
 
 document.addEventListener("DOMContentLoaded", init);

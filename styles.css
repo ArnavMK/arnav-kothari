@@ -6,6 +6,7 @@
   --bg-card: #ffffff;
   --text-primary: #1a1a1a;
   --text-secondary: #5f5f66;
+  --text-body: #35353b;
   --accent: #4a5cff;
   --accent-soft: rgba(74, 92, 255, 0.12);
   --accent-glow: rgba(74, 92, 255, 0.18);
@@ -29,6 +30,7 @@
   --bg-card: #161619;
   --text-primary: #f2f2f4;
   --text-secondary: #9a9aa4;
+  --text-body: #d2d2d8;
   --accent: #7d8cff;
   --accent-soft: rgba(125, 140, 255, 0.16);
   --accent-glow: rgba(125, 140, 255, 0.32);
