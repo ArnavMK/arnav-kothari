@@ -1,75 +1,3 @@
-/* =============================================================================
-   PROJECTS DATA  —  THIS IS THE ONLY FILE YOU EDIT TO ADD / UPDATE PROJECTS
-   =============================================================================
-
-   Everything on the site is generated from the list below:
-     - the tile grid on the home page
-     - each project's detail page (projects/project.html?id=...)
-     - each project's gallery of pictures
-     - each project's timeline
-     - each project's deep dive page (projects/deep-dive.html?id=...)
-     - each project's full gallery page (projects/gallery.html?id=...)
-
-   ---------------------------------------------------------------------------
-   HOW TO ADD A NEW PROJECT
-   ---------------------------------------------------------------------------
-   1. Copy one whole { ... } block below (including the trailing comma).
-   2. Paste it into the PROJECTS list.
-   3. Change the fields. The only rules:
-        - "id" must be unique and URL-safe (letters, numbers, dashes).
-        - image paths are written relative to the SITE ROOT, e.g.
-            "assets/projects/my-project/hero.jpg"
-          (do NOT put "../" in front — the code adds it where needed).
-   4. Put your images in:  assets/projects/<your-id>/....
-      Any placehold.co URL also works while you don't have a picture yet.
-      Windows paths with backslashes ("assets\projects\x\1.png") are fine too.
-
-   Every field except "id", "title" and "thumbnail" is optional — leave a
-   list empty ([]) or a string empty ("") and that part just won't render.
-   ---------------------------------------------------------------------------
-
-   IMAGES vs VIDEOS
-   Anywhere a picture is accepted (gallery, timeline images, details, full
-   gallery) you can instead drop in a video file — .mp4 / .webm / .ogg /
-   .mov / .m4v. Videos play automatically, muted, on a loop, with no
-   controls; the controls only show up while the mouse is hovering over
-   them. Mix images and videos freely in the same list.
-   ---------------------------------------------------------------------------
-
-   FIELD REFERENCE
-     id          string   unique slug, also the ?id= in the URL
-     title       string   project name (tile + page heading)
-     category    string   small label under the title (e.g. "Web Development")
-     thumbnail   string   image shown on the home-page tile
-     hero        string   big image at the top of the detail page (optional)
-     overview    [string] one string per paragraph of the brief overview
-     gallery     [string] more media (images or videos) shown under the overview
-     links       [{ label, url }]   buttons like Live Demo / GitHub
-     details     string | [ item ]
-                            the "Deep Dive" page — architecture, design
-                            decisions, how it actually works. Only shown
-                            (and the button only appears) if this has
-                            content. Supports Markdown (headings, lists,
-                            bold/italic, links, images, etc — see
-                            projects/deep-dive.js for the full rundown).
-                            Two ways to write it:
-                              - a STRING path to a .md file, e.g.
-                                "assets/projects/my-project/details.md"
-                                — recommended once it gets long, keeps big
-                                write-ups out of this file entirely.
-                              - an inline LIST for something short, where
-                                each item is either a plain string (one
-                                Markdown block) or { heading, text } for a
-                                sub-section with its own heading
-     fullGallery [string]  the "Gallery" page — every photo of the project,
-                            in no particular order. Only shown (and the
-                            button only appears) if this has content.
-     timeline    [ entry ] ordered log, newest or oldest first — your call
-       entry.date    string        e.g. "Jan 2026" or "2026-01-15"
-       entry.title   string        short heading for this step
-       entry.text    string | [string]   paragraph(s) describing what you did
-       entry.images  [string]      media for this step (images or videos, shown on the right)
-   ============================================================================= */
 
 window.PROJECTS = [
 
@@ -163,20 +91,46 @@ window.PROJECTS = [
     overview: [
       `Wave Forge is a custom Solid State Amplifier made from scratch, including all the hardware and firmware.
       This is a multi-board, feature-dense guitar amplifier, I made this project to combine all the tools and software I
-      use to get my guitar tone into one singular device.`,
-      ""
+      use to get my guitar tone into one singular device. And also as a first real end-to-end project that will teach me everything about audio hardware and firmware.`,
+      "The main features of this project are as follows:",
+      "An Amp head and a cabinet separation. The Audio DSP,convolution transforms, preamp, guitar input, the screen controller etc.. lives in the amp head. Whereas the cabinet contains the audio power amplifier board that feeds into a 12 inch FX12-F200 speaker.",
+      "The whole amp will be powered by an external custom power supply that takes in mains voltage and gives out 5V for DSP and Screen Controller, 9V for preamp, 24V for the power amplifier",
+      "As for the UI and audio control features:",
+      "It will have the ability to change all amp and cab parameters in real time, load different impulse responses, save and load presets that store the tone you created, have a suite of standard effect pedals like delay, overdrive, chorus and reverb etc..",
+      "It will also have the ability to connect to an external foot-switch pedal, where each foot switch can be linked to a saved preset, hence when you press the button it will instantly change to that saved preset tone. This helps avoiding to look and change the settings directly on the amp when you are performing a known song. ",
+      "To set the presets to the switches, there will be a section in the ui that will show the 2d mockup of the pedal and you can assign presets that way. so when the MIDI from the pedal arrives with a certain value it will switch to that assigned preset."
     ],
-    gallery: [
-      "https://placehold.co/900x600/eeeeee/999?text=Screenshot+1",
-      "https://placehold.co/900x600/eeeeee/999?text=Screenshot+2",
-      "https://placehold.co/900x600/eeeeee/999?text=Screenshot+3"
+    gallery : [
+      "assets\\projects\\wave-forge\\Timeline\\mae.jpeg",
+      "assets\\projects\\wave-forge\\Timeline\\first_order_mess.jpeg",
+      "assets\\projects\\wave-forge\\Timeline\\shori_rev_3.jpeg",
     ],
     links: [
       {label: "Github", url: "https://github.com/ArnavMK/WaveForge"}
     ],
     details: [],
     fullGallery: [],
-    timeline: []
+    timeline: [
+      {
+        date: "December 2025" ,
+        title: "Start of my greatest creation! Project feature set and architecture.",
+        text: [
+          "This is the start of the timeline for WaveForge: A custom solid state guitar amplifier, I recently started working on the ground station for my university's rocketry team, where created my first ever pcb. I really enjoyed that so i though to start a personal project that would include this and teach me more about hardware and embedded firmware.",
+          "I have been playing the electric guitar for over 10 years now, at this point its a part of my identity. I usually get my tones through a software called Neural DSP and their plugins that they sell for windows PC. In order to use that i need to plug my laptop into an audio itnerface and then to my gutiar and then the output of that interface to a speaker or headphone. Its a lot of hassel and really difficult to setup at live performances to get those tones. So i though why not make my own amplifier that will combine all of those things into one.",
+          "To create a project feature set and some sort of architecture i took inspiration from the big companies like Neural DSP Quad Cortex and Kemper. I had to go the DSP route since i need firmware experience. They use extremely high specced Analog devices SHARQ chips, 4 of them in parellal to perform extremely high qulality neural models to model how an actual JFET behaves to a players guitar technique. ",
+          "I obviusly cant do that. So i decided to go with the DIY embedded route using an STM32 with an FPU and DMA abilities. I have seen many DIY amp builds that do this and get a good tone out of simple convulution maths and effects. ",
+          "I also wanted a UI for the amps and tones and knobs etc.. to give it more of a mrodern digital amp look. Hence a screen is needed. I want to go with a more amp head and cabinet traditional look while still having the mordern DSP inside but with a speaker built in to the cabinet side.",
+          "The amp is goign to be basically a quad cortex from the inside but a traditional amp from the outside with an amp head and cabinet.",
+          "As for the archetecture so far i think i might go with a multi board system to devide responsibilities like we do in software. We will definately need a board for DSP only, and Power supply, they could connect via a cabel. To be decided."
+        ],
+        images: [
+          {src: "assets\\projects\\wave-forge\\Timeline\\amp_inspo_2.jpg", title: "Neural DSP Quad Cortex"},
+          {src: "assets\\projects\\wave-forge\\Timeline\\amp_inso.jpg", title: "Traditional Amp head and Cabinet Inspiration"},
+          {src: "assets\\projects\\wave-forge\\Timeline\\adi.png", title: "Quad Cortex Internal PCB using the ADI SHARC chips"},
+        ]
+      }
+
+    ]
   },
 
   // ==========================================================================
@@ -293,7 +247,7 @@ window.PROJECTS = [
       },
 
       {
-        date: "January 2026",
+        date: "December 2025",
         title: "Designed Rev 1 Of the Gameboy Main Board",
         text: [
           "This is the first timeline entry of this project. I joined the ground station team for my university's rocketry society. The main foundation of a plan is made by the team lead. Her plan is to have a bigger ground station where smaller independent ground stations can connect to. The project is called HiPRDeck.",
