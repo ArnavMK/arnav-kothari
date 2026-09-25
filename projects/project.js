@@ -46,9 +46,6 @@ function renderTimeline(timeline) {
     .join("");
 
   return `
-    <button class="timeline-toggle open" id="timeline-toggle" aria-expanded="true">
-      <span id="timeline-toggle-label">Hide Timeline</span> <span class="chevron">&darr;</span>
-    </button>
     <section class="timeline" id="timeline">
       <div class="timeline-header">
         <h2 class="timeline-heading">Timeline</h2>
@@ -111,27 +108,10 @@ function wireTimelineToggle() {
   wireTimelineSort(timeline);
 }
 
-/* Deep Dive / Full Gallery are separate pages, so these are just links —
-   only shown when the project actually has that content. */
+/* One row of buttons under the overview: external links (GitHub etc.),
+   then Deep Dive / Full Gallery (separate pages, so plain links), then the
+   timeline toggle. Each only appears when the project has that content. */
 function renderProjectActions(project) {
-  const hasDetails = project.details && project.details.length;
-  const hasFullGallery = project.fullGallery && project.fullGallery.length;
-  if (!hasDetails && !hasFullGallery) return "";
-
-  const idParam = encodeURIComponent(project.id);
-  const buttons = [
-    hasDetails
-      ? `<a href="deep-dive.html?id=${idParam}" class="btn btn-outline">Deep Dive &rarr;</a>`
-      : "",
-    hasFullGallery
-      ? `<a href="gallery.html?id=${idParam}" class="btn btn-outline">Full Gallery &rarr;</a>`
-      : ""
-  ].join("");
-
-  return `<div class="project-actions">${buttons}</div>`;
-}
-
-function renderProject(project) {
   const links = (project.links || [])
     .map(
       (l) =>
@@ -139,6 +119,26 @@ function renderProject(project) {
     )
     .join("");
 
+  const idParam = encodeURIComponent(project.id);
+  const deepDive = hasDetailsContent(project.details)
+    ? `<a href="deep-dive.html?id=${idParam}" class="btn btn-outline">Deep Dive &rarr;</a>`
+    : "";
+  const fullGallery =
+    project.fullGallery && project.fullGallery.length
+      ? `<a href="gallery.html?id=${idParam}" class="btn btn-outline">Full Gallery &rarr;</a>`
+      : "";
+  const timelineToggle =
+    project.timeline && project.timeline.length
+      ? `<button class="timeline-toggle open" id="timeline-toggle" type="button" aria-expanded="true">
+           <span id="timeline-toggle-label">Hide Timeline</span> <span class="chevron">&darr;</span>
+         </button>`
+      : "";
+
+  const all = links + deepDive + fullGallery + timelineToggle;
+  return all ? `<div class="project-actions">${all}</div>` : "";
+}
+
+function renderProject(project) {
   const hasOverview =
     project.overview &&
     (Array.isArray(project.overview) ? project.overview.length : project.overview);
@@ -158,8 +158,6 @@ function renderProject(project) {
     </div>
 
     ${mediaGrid(project.gallery, "project-gallery")}
-
-    ${links ? `<div class="project-links">${links}</div>` : ""}
 
     ${renderProjectActions(project)}
 

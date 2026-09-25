@@ -182,6 +182,30 @@
   font-style: italic;
 }
 
+.deep-dive-body table {
+  width: 100%;
+  margin: 0 0 1.25rem;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: var(--text-body);
+}
+
+.deep-dive-body th,
+.deep-dive-body td {
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.deep-dive-body th {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom-color: var(--border-strong);
+}
+
 .deep-dive-body hr {
   border: none;
   border-top: 1px solid var(--border);
@@ -200,6 +224,170 @@
   border-radius: 14px;
   border: 1px solid var(--border);
   margin: 1.5rem auto;
+}
+
+/* ===== Deep Dive file explorer (folders of Markdown files) ===== */
+.explorer {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+  margin-top: 1.75rem;
+}
+
+.explorer-nav {
+  position: sticky;
+  top: 6rem;
+  max-height: calc(100vh - 7.5rem);
+  overflow-y: auto;
+  padding: 0.85rem 0.6rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.explorer-label {
+  padding: 0.15rem 0.7rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.explorer-folder + .explorer-folder {
+  margin-top: 0.15rem;
+}
+
+.explorer-folder-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: var(--text-primary);
+  font: 600 0.9rem/1.4 var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.explorer-folder-btn:hover {
+  background: var(--bg-soft);
+}
+
+.explorer-folder-btn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.explorer-folder-btn .explorer-chevron {
+  width: 13px;
+  height: 13px;
+  transition: transform var(--transition);
+}
+
+.explorer-folder.open .explorer-chevron {
+  transform: rotate(90deg);
+}
+
+.explorer-folder.open > .explorer-folder-btn svg:nth-child(2) {
+  color: var(--accent);
+}
+
+.explorer-folder-name {
+  flex: 1;
+}
+
+.explorer-count {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.explorer-files {
+  list-style: none;
+  margin: 0.1rem 0 0.5rem 1.5rem;
+  padding-left: 0.55rem;
+  border-left: 1px solid var(--border);
+}
+
+.explorer-folder:not(.open) .explorer-files {
+  display: none;
+}
+
+.explorer-file {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.42rem 0.65rem;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: background var(--transition), color var(--transition);
+}
+
+.explorer-file svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.explorer-file:hover {
+  background: var(--bg-soft);
+  color: var(--text-primary);
+}
+
+.explorer-file.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.explorer-content {
+  min-width: 0;
+  scroll-margin-top: 6rem;
+}
+
+.explorer-crumbs {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.explorer-crumbs span {
+  margin: 0 0.35rem;
+  opacity: 0.5;
+}
+
+.explorer-content .deep-dive-body > :first-child {
+  margin-top: 0.75rem;
+}
+
+.explorer-content .deep-dive-body.loading {
+  opacity: 0.45;
+  transition: opacity var(--transition);
+}
+
+@media (max-width: 860px) {
+  .explorer {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .explorer-nav {
+    position: static;
+    max-height: none;
+  }
 }
 
 /* ===== Shared media frame (images + videos) ===== */
@@ -266,14 +454,6 @@
   aspect-ratio: 3 / 2;
 }
 
-/* ===== Links row ===== */
-.project-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin: 2rem 0 0;
-}
-
 .project-link {
   color: var(--accent);
   text-decoration: none;
@@ -283,7 +463,7 @@
   text-decoration: underline;
 }
 
-/* ===== Deep Dive / Full Gallery links ===== */
+/* ===== Action row: links, Deep Dive, Full Gallery, timeline toggle ===== */
 .project-actions {
   display: flex;
   flex-wrap: wrap;
@@ -291,15 +471,16 @@
   margin: 2.5rem 0 0;
 }
 
-/* ===== Timeline toggle button ===== */
+/* ===== Timeline toggle button (lives in the action row) ===== */
 .timeline-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  margin: 3.5rem 0 0;
+  margin: 0;
   padding: 0.9rem 1.75rem;
   font-family: var(--font-mono);
   font-size: 0.72rem;
+  line-height: 1.6;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #fff;

@@ -83,6 +83,15 @@ function wireVideoHoverControls(root) {
   });
 }
 
+/* `details` can be a path string (one .md file), an inline list, or a
+   { folders: [...] } object (multi-file explorer) — see deep-dive.js. */
+const hasDetailsContent = (d) => {
+  if (!d) return false;
+  if (typeof d === "string") return d.trim() !== "";
+  if (Array.isArray(d)) return d.length > 0;
+  return Array.isArray(d.folders) && d.folders.some((f) => f.files && f.files.length);
+};
+
 /* Look up the project for the current page's ?id=, or render a friendly
    "not found" message into `mount` and return null. */
 function findProjectOrShowError(mount) {

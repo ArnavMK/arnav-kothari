@@ -28,7 +28,6 @@ window.PROJECTS = [
       "assets\\projects\\Mathcraft\\3.png",
     ],
     links: [
-      { label: "Live Demo", url: "https://example.com" },
       { label: "GitHub", url: "https://github.com/ArnavMK" }
     ],
     details: [],
@@ -84,21 +83,21 @@ window.PROJECTS = [
   // ==========================================================================
   {
     id: "wave-forge",
-    title: "Wave forge",
+    title: "Wave Forge",
     category: "Custom Solid State Guitar Amplifier",
     thumbnail: "assets\\projects\\wave-forge\\thumb.png",
     hero: "assets\\projects\\wave-forge\\hero.png",
     overview: [
-      `Wave Forge is a custom Solid State Amplifier made from scratch, including all the hardware and firmware.
-      This is a multi-board, feature-dense guitar amplifier, I made this project to combine all the tools and software I
-      use to get my guitar tone into one singular device. And also as a first real end-to-end project that will teach me everything about audio hardware and firmware.`,
+      `Wave Forge is a custom Solid-State Amplifier made from scratch, including all the hardware and firmware.
+      This is a multi-board, feature-dense guitar amplifier. I made this project to combine all the tools and software I
+      use to get my guitar tone into one singular device, and also as a first real end-to-end project that will teach me everything about audio hardware and firmware.`,
       "The main features of this project are as follows:",
-      "An Amp head and a cabinet separation. The Audio DSP,convolution transforms, preamp, guitar input, the screen controller etc.. lives in the amp head. Whereas the cabinet contains the audio power amplifier board that feeds into a 12 inch FX12-F200 speaker.",
-      "The whole amp will be powered by an external custom power supply that takes in mains voltage and gives out 5V for DSP and Screen Controller, 9V for preamp, 24V for the power amplifier",
+      "An amp head and a cabinet separation. The audio DSP, convolution transforms, preamp, guitar input, the screen controller, etc., live in the amp head, whereas the cabinet contains the audio power amplifier board that feeds into a 12-inch FX12-F200 speaker.",
+      "The whole amp will be powered by an external custom power supply that takes in mains voltage and gives out 5V for DSP and screen controller, 9V for preamp, 24V for the power amplifier.",
       "As for the UI and audio control features:",
-      "It will have the ability to change all amp and cab parameters in real time, load different impulse responses, save and load presets that store the tone you created, have a suite of standard effect pedals like delay, overdrive, chorus and reverb etc..",
-      "It will also have the ability to connect to an external foot-switch pedal, where each foot switch can be linked to a saved preset, hence when you press the button it will instantly change to that saved preset tone. This helps avoiding to look and change the settings directly on the amp when you are performing a known song. ",
-      "To set the presets to the switches, there will be a section in the ui that will show the 2d mockup of the pedal and you can assign presets that way. so when the MIDI from the pedal arrives with a certain value it will switch to that assigned preset."
+      "It will have the ability to change all amp and cab parameters in real time, load different impulse responses, save and load presets that store the tone you created, have a suite of standard effect pedals like delay, overdrive, chorus and reverb, etc.",
+      "It will also have the ability to connect to an external foot-switch pedal, where each foot switch can be linked to a saved preset, hence when you press the button, it will instantly change to that saved preset tone. This helps avoid looking and changing the settings directly on the amp when you are performing a known song.",
+      "To set the presets to the switches, there will be a section in the UI that will show the 2D mockup of the pedal and you can assign presets that way, so when the MIDI from the pedal arrives with a certain value, it will switch to that assigned preset."
     ],
     gallery : [
       "assets\\projects\\wave-forge\\Timeline\\mae.jpeg",
@@ -108,24 +107,85 @@ window.PROJECTS = [
     links: [
       {label: "Github", url: "https://github.com/ArnavMK/WaveForge"}
     ],
-    details: [],
-    fullGallery: [],
+    // Deep Dive as a file explorer: folders in the sidebar, each holding a few
+    // Markdown files. See the top of projects/deep-dive.js for the format.
+    details: {
+      folders: [
+        {
+          name: "Project Overview",
+          files: [
+            { title: "Introduction", src: "assets\\projects\\wave-forge\\details\\overview\\introduction.md" },
+            { title: "Feature Set", src: "assets\\projects\\wave-forge\\details\\overview\\feature-set.md" }
+          ]
+        },
+        {
+          name: "Hardware Architecture",
+          files: [
+            { title: "System Overview", src: "assets\\projects\\wave-forge\\details\\hardware\\system-overview.md" },
+            { title: "Power Supply", src: "assets\\projects\\wave-forge\\details\\hardware\\power-supply.md" }
+          ]
+        },
+        {
+          name: "Firmware",
+          files: [
+            { title: "DSP Signal Chain", src: "assets\\projects\\wave-forge\\details\\firmware\\dsp-signal-chain.md" },
+            { title: "UI and Presets", src: "assets\\projects\\wave-forge\\details\\firmware\\ui-and-presets.md" }
+          ]
+        },
+        {
+          name: "Boards",
+          files: [
+            { title: "Gen (Power Supply)", src: "assets\\projects\\wave-forge\\details\\boards\\gen-power-supply.md" },
+            { title: "Shori (DSP)", src: "assets\\projects\\wave-forge\\details\\boards\\shori-dsp.md" },
+            { title: "Mae", src: "assets\\projects\\wave-forge\\details\\boards\\mae.md" }
+          ]
+        }
+      ]
+    },
+    fullGallery: [
+      "assets\\projects\\wave-forge\\thumb.png",
+      "assets\\projects\\wave-forge\\hero.png",
+      "assets\\projects\\wave-forge\\Timeline\\mae.jpeg",
+      "assets\\projects\\wave-forge\\Timeline\\first_order_mess.jpeg",
+      "assets\\projects\\wave-forge\\Timeline\\shori_rev_3.jpeg",
+      "assets\\projects\\wave-forge\\Timeline\\shori_mae.jpeg",
+      "assets\\projects\\wave-forge\\Timeline\\Gen_pcb_1.jpeg",
+      "assets\\projects\\wave-forge\\Timeline\\gen_pcb_2.jpeg",
+      "assets\\projects\\wave-forge\\Timeline\\gen_close_up_1.jpeg",
+      "assets\\projects\\wave-forge\\Timeline\\gen_close_up_2.jpeg"
+    ],
     timeline: [
       {
-        date: "December 2025" ,
+        date: "September 2026",
+        title: "Gen Power Supply Assembly and Shori Rev 4 Issues",
+        text : [
+          "This Monday, 21st of September, I received the boards and components from JLCPCB and DigiKey. This order contained components for Gen Rev 2 and Shori Rev 4. Then the next day on Tuesday I reflowed Gen using my hotplate and solder paste. This was my first time ever assembling a PCB like this with small components.",
+          "Unfortunately, for Shori I found some issues with Rev 4. The power circuitry needs to be revisited because I saw that currently it goes straight through the audio codec and then to the STM32. This way whenever the MCU draws spikes of current, it goes through the codec, inducing it with a lot of noise. Hence the idea is to follow a split power routing strategy.",
+          "Another issue from Rev 4 is component-related. The NE3552 opamp is a dual-supply IC, where it requires V+ and V-. However, in Shori the V+ is 5V and V- is ground reference of 0V, hence the opamp will operate on the new VBIAS = 2.3V. This is way below operational voltages. The thing won't even power on. Hence I then found a direct replacement single-supply opamp, the OPA1692ID.",
+          "Coming back to Gen assembly. For my first time soldering using the hotplate, it was a really good pass, although it seems like the board was not completely flush with the hotplate, causing the solder to melt at different rates. After finishing a reflow session I looked through the board and found a potential short, a resistor completely flipped from its original position, some other passives misaligned, but the buck converter IC both look fine."
+        ],
+        images: [
+          { src: "assets\\projects\\wave-forge\\Timeline\\Gen_pcb_1.jpeg", title: "Gen Rev 2 assembled" },
+          { src: "assets\\projects\\wave-forge\\Timeline\\gen_pcb_2.jpeg", title: "Gen Rev 2 with the Mean Well IRM-90-24 mains module" },
+          { src: "assets\\projects\\wave-forge\\Timeline\\gen_close_up_2.jpeg", title: "Buck converter section close-up" }
+        ]
+      },
+
+      {
+        date: "December 2025",
         title: "Start of my greatest creation! Project feature set and architecture.",
         text: [
-          "This is the start of the timeline for WaveForge: A custom solid state guitar amplifier, I recently started working on the ground station for my university's rocketry team, where created my first ever pcb. I really enjoyed that so i though to start a personal project that would include this and teach me more about hardware and embedded firmware.",
-          "I have been playing the electric guitar for over 10 years now, at this point its a part of my identity. I usually get my tones through a software called Neural DSP and their plugins that they sell for windows PC. In order to use that i need to plug my laptop into an audio itnerface and then to my gutiar and then the output of that interface to a speaker or headphone. Its a lot of hassel and really difficult to setup at live performances to get those tones. So i though why not make my own amplifier that will combine all of those things into one.",
-          "To create a project feature set and some sort of architecture i took inspiration from the big companies like Neural DSP Quad Cortex and Kemper. I had to go the DSP route since i need firmware experience. They use extremely high specced Analog devices SHARQ chips, 4 of them in parellal to perform extremely high qulality neural models to model how an actual JFET behaves to a players guitar technique. ",
-          "I obviusly cant do that. So i decided to go with the DIY embedded route using an STM32 with an FPU and DMA abilities. I have seen many DIY amp builds that do this and get a good tone out of simple convulution maths and effects. ",
-          "I also wanted a UI for the amps and tones and knobs etc.. to give it more of a mrodern digital amp look. Hence a screen is needed. I want to go with a more amp head and cabinet traditional look while still having the mordern DSP inside but with a speaker built in to the cabinet side.",
-          "The amp is goign to be basically a quad cortex from the inside but a traditional amp from the outside with an amp head and cabinet.",
-          "As for the archetecture so far i think i might go with a multi board system to devide responsibilities like we do in software. We will definately need a board for DSP only, and Power supply, they could connect via a cabel. To be decided."
+          "This is the start of the timeline for Wave Forge: a custom solid-state guitar amplifier. I recently started working on the ground station for my university's rocketry team, where I created my first ever PCB. I really enjoyed that, so I thought to start a personal project that would include this and teach me more about hardware and embedded firmware.",
+          "I have been playing the electric guitar for over 10 years now. At this point it's a part of my identity. I usually get my tones through software called Neural DSP and their plugins that they sell for Windows PC. In order to use that, I need to plug my laptop into an audio interface and then to my guitar and then the output of that interface to a speaker or headphone. It's a lot of hassle and really difficult to set up at live performances to get those tones. So I thought, why not make my own amplifier that will combine all of those things into one.",
+          "To create a project feature set and some sort of architecture, I took inspiration from the big companies like Neural DSP Quad Cortex and Kemper. I had to go the DSP route since I need firmware experience. They use extremely high-specced Analog Devices SHARC chips, 4 of them in parallel, to perform extremely high-quality neural models to model how an actual JFET behaves to a player's guitar technique.",
+          "I obviously can't do that. So I decided to go with the DIY embedded route using an STM32 with an FPU and DMA abilities. I have seen many DIY amp builds that do this and get a good tone out of simple convolution maths and effects.",
+          "I also wanted a UI for the amps and tones and knobs, etc., to give it more of a modern digital amp look. Hence a screen is needed. I want to go with a more amp head and cabinet traditional look while still having the modern DSP inside but with a speaker built into the cabinet side.",
+          "The amp is going to be basically a Quad Cortex from the inside but a traditional amp from the outside with an amp head and cabinet.",
+          "As for the architecture so far, I think I might go with a multi-board system to divide responsibilities like we do in software. We will definitely need a board for DSP only, and power supply. They could connect via a cable. To be decided."
         ],
         images: [
           {src: "assets\\projects\\wave-forge\\Timeline\\amp_inspo_2.jpg", title: "Neural DSP Quad Cortex"},
-          {src: "assets\\projects\\wave-forge\\Timeline\\amp_inso.jpg", title: "Traditional Amp head and Cabinet Inspiration"},
+          {src: "assets\\projects\\wave-forge\\Timeline\\amp_inso.jpg", title: "Traditional Amp Head and Cabinet Inspiration"},
           {src: "assets\\projects\\wave-forge\\Timeline\\adi.png", title: "Quad Cortex Internal PCB using the ADI SHARC chips"},
         ]
       }
