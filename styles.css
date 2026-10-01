@@ -50,8 +50,8 @@
 
 html {
   /* Scales every rem-based size (most of the site's type/spacing) down
-     uniformly, so 100% browser zoom reads about like 85% used to. */
-  font-size: 87.5%;
+     uniformly, so 100% browser zoom reads about like 80% used to. */
+  font-size: 80%;
   scroll-behavior: smooth;
 }
 

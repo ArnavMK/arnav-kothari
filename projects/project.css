@@ -224,6 +224,45 @@
   border-radius: 14px;
   border: 1px solid var(--border);
   margin: 1.5rem auto;
+  background: var(--bg-soft);
+}
+
+/* A short, wide image (a signal-path chart, a block diagram — flagged by
+   deep-dive.js once it knows the real proportions) gets crushed unreadable
+   by the cap above, so it uses the full column width instead. */
+.deep-dive-body img.wide {
+  max-width: 100%;
+}
+
+/* A run of consecutive ![]() images with nothing else between them (see
+   groupConsecutiveImages in deep-dive.js) — one per column instead of
+   stacked full-width. */
+.md-image-row {
+  display: grid;
+  grid-template-columns: repeat(var(--row-count, 3), 1fr);
+  align-items: start;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+/* Natural aspect ratio, no cropping — a portrait photo next to landscape
+   ones just ends up taller, frame and all, rather than getting its sides
+   cut off to match a fixed box. */
+.md-image-row img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  margin: 0;
+  background: var(--bg-soft);
+}
+
+@media (max-width: 640px) {
+  .md-image-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ===== Deep Dive file explorer (folders of Markdown files) ===== */

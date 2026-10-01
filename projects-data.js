@@ -121,8 +121,9 @@ window.PROJECTS = [
         {
           name: "Hardware Architecture",
           files: [
-            { title: "System Overview", src: "assets\\projects\\wave-forge\\details\\hardware\\system-overview.md" },
-            { title: "Power Supply", src: "assets\\projects\\wave-forge\\details\\hardware\\power-supply.md" }
+            { title: "Board Descriptions", src: "assets\\projects\\wave-forge\\details\\hardware\\board-descriptions.md" },
+            { title: "Signal Path & Control Flow", src: "assets\\projects\\wave-forge\\details\\hardware\\signal-path.md" },
+            { title: "Physical Assembly", src: "assets\\projects\\wave-forge\\details\\hardware\\physical-assembly.md" }
           ]
         },
         {
@@ -135,9 +136,9 @@ window.PROJECTS = [
         {
           name: "Boards",
           files: [
-            { title: "Gen (Power Supply)", src: "assets\\projects\\wave-forge\\details\\boards\\gen-power-supply.md" },
-            { title: "Shori (DSP)", src: "assets\\projects\\wave-forge\\details\\boards\\shori-dsp.md" },
-            { title: "Mae", src: "assets\\projects\\wave-forge\\details\\boards\\mae.md" }
+            { title: "Gen", src: "assets\\projects\\wave-forge\\details\\boards\\gen-power-supply.md" },
+            { title: "Mae", src: "assets\\projects\\wave-forge\\details\\boards\\mae.md" },
+            { title: "Shori", src: "assets\\projects\\wave-forge\\details\\boards\\shori-dsp.md" },
           ]
         }
       ]
@@ -169,6 +170,23 @@ window.PROJECTS = [
           { src: "assets\\projects\\wave-forge\\Timeline\\gen_pcb_2.jpeg", title: "Gen Rev 2 with the Mean Well IRM-90-24 mains module" },
           { src: "assets\\projects\\wave-forge\\Timeline\\gen_close_up_2.jpeg", title: "Buck converter section close-up" }
         ]
+      },
+      
+      {
+        date: "Late December 2025",
+        title: "Shori Rev 1 and preliminary architectural decisions",
+        text: [
+          "This whole month I have been researching digital signal processing, and how digital and analog amp work. Hence i decided to start off making a set of preliminary design choices and made the first revision of Shori the digital signal processing board.",
+          "Shori (processing in Japanese) is a DSP board made up of an STM32F405RGT6 MCU and PCM3060PWR audio codec. This boards job is to convert the guitar audio to digital using the codec and the MCU would then do all the processesing. Turn it back into analog and sent away to the next board",
+          "It has an aux summing circuit that sums the codec output with the AUX input from the 3.5mm AUX jack. So i can connect a phone or laptop to it for backing tracks. It uses the NE3552 opamp and an inverting summing amplifier circuit to do so.",
+          "As for archetectural descions, i am going for three sepearte boards. A power amplifier board that will hold the power amplfication circuits and also the power supply section. And a sepearte screen board that will control the screen and communicate to Shori via UART, it will relay all the parameter changes. And as already mentioned Shori DSP board."
+
+        ],
+        images: [
+          {src: "assets\\projects\\wave-forge\\Timeline\\shoripcb1.png"},
+          {src: "assets\\projects\\wave-forge\\Timeline\\shori1.png"}
+        ]
+
       },
 
       {

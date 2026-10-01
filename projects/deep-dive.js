@@ -43,9 +43,18 @@ if (typeof marked !== "undefined") {
   marked.setOptions({ breaks: true });
 }
 
+// A "---" divider immediately after a line of text (no blank line between
+// them) isn't a horizontal rule in Markdown — it's Setext heading syntax,
+// so it silently turns that line into an empty heading and eats the
+// divider instead of rendering it. We only ever mean "divider" here, so
+// insert the blank line for people rather than let this bite them.
+const ensureBlankLineBeforeHr = (text) =>
+  text.replace(/([^\n])\r?\n[ \t]{0,3}(-{3,}|\*{3,}|_{3,})[ \t]*(?=\r?\n|$)/g, "$1\n\n$2");
+
 const renderMarkdown = (value) => {
-  const text = Array.isArray(value) ? value.filter((v) => String(v).trim() !== "").join("\n\n") : value || "";
-  if (!text) return "";
+  const raw = Array.isArray(value) ? value.filter((v) => String(v).trim() !== "").join("\n\n") : value || "";
+  if (!raw) return "";
+  const text = ensureBlankLineBeforeHr(raw);
   return typeof marked !== "undefined" ? marked.parse(text) : toParagraphs(text);
 };
 
@@ -72,6 +81,67 @@ const fixMarkdownImagePaths = (html) => {
   return wrap.innerHTML;
 };
 
+/* A run of images with nothing else between them — either on consecutive
+   lines (one paragraph, <br>-separated, since breaks:true is on) or
+   separated by blank lines (each its own <p>) — reads as "these go
+   together", so lay them out as a row, one per column, instead of
+   stacking them full-width. No special syntax needed, just put the
+   ![]() lines next to each other. */
+const groupConsecutiveImages = (html) => {
+  const wrap = document.createElement("div");
+  wrap.innerHTML = html;
+
+  const makeRow = (imgs) => {
+    const row = document.createElement("div");
+    row.className = "md-image-row";
+    row.style.setProperty("--row-count", imgs.length);
+    imgs.forEach((img) => row.appendChild(img));
+    return row;
+  };
+
+  // Case 1: multiple <img> inside one <p>, only whitespace/<br> around them
+  // (what three "![]()" lines in a row, no blank lines, actually produces).
+  wrap.querySelectorAll("p").forEach((p) => {
+    const onlyImagesAndBreaks = Array.from(p.childNodes).every(
+      (n) =>
+        (n.nodeType === 1 && (n.tagName === "IMG" || n.tagName === "BR")) ||
+        (n.nodeType === 3 && !n.textContent.trim())
+    );
+    const imgs = Array.from(p.children).filter((el) => el.tagName === "IMG");
+    if (onlyImagesAndBreaks && imgs.length >= 2) {
+      p.replaceWith(makeRow(imgs));
+    }
+  });
+
+  // Case 2: consecutive sibling <p> elements, each holding exactly one
+  // image and nothing else (what blank-line-separated "![]()" lines
+  // produce).
+  const isSoloImageP = (el) =>
+    !!el && el.tagName === "P" && el.children.length === 1 && el.children[0].tagName === "IMG" && !el.textContent.trim();
+  let node = wrap.firstElementChild;
+  while (node) {
+    const next = node.nextElementSibling;
+    if (isSoloImageP(node)) {
+      const run = [node];
+      let sib = next;
+      while (isSoloImageP(sib)) {
+        run.push(sib);
+        sib = sib.nextElementSibling;
+      }
+      if (run.length >= 2) {
+        const row = makeRow(run.map((p) => p.firstElementChild));
+        run[0].replaceWith(row);
+        run.slice(1).forEach((p) => p.remove());
+      }
+      node = sib;
+      continue;
+    }
+    node = next;
+  }
+
+  return wrap.innerHTML;
+};
+
 function renderDetailsList(details) {
   return details
     .map((item) => {
@@ -94,9 +164,28 @@ async function fetchMarkdownHtml(path) {
   const url = asset(path);
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Could not load ${url} (${res.status})`);
-  const html = fixMarkdownImagePaths(renderMarkdown(await res.text()));
+  const html = groupConsecutiveImages(fixMarkdownImagePaths(renderMarkdown(await res.text())));
   mdCache.set(path, html);
   return html;
+}
+
+/* A photo reads best capped at a modest inset width (see .deep-dive-body
+   img in project.css). A wide technical diagram — a signal-path chart, a
+   block diagram — is short enough that the same cap crushes its labels
+   down to unreadable, so once we know an image's real proportions, a
+   clearly panoramic one gets flagged to use the full column width
+   instead. Same trick as the timeline's landscape-photo detection. */
+function wireWideDiagramImages(deepDiveBody) {
+  deepDiveBody.querySelectorAll("img").forEach((img) => {
+    if (img.closest(".md-image-row")) return; // row layout decides its own sizing
+    const markIfWide = () => {
+      if (img.naturalWidth && img.naturalHeight && img.naturalWidth / img.naturalHeight > 2.2) {
+        img.classList.add("wide");
+      }
+    };
+    if (img.complete) markIfWide();
+    else img.addEventListener("load", markIfWide);
+  });
 }
 
 const loadFailedHtml = (err) =>
@@ -230,6 +319,7 @@ function mountExplorer(container, project, folders) {
     body.classList.remove("loading");
     body.innerHTML = html;
     wireVideoHoverControls(body);
+    wireWideDiagramImages(body);
 
     // Opening a document from further down the page shouldn't leave you
     // staring at the middle of it — jump back to the top of the pane.
@@ -288,8 +378,9 @@ async function init() {
     body.innerHTML =
       typeof details === "string"
         ? await fetchMarkdownHtml(details)
-        : fixMarkdownImagePaths(renderDetailsList(details));
+        : groupConsecutiveImages(fixMarkdownImagePaths(renderDetailsList(details)));
     wireVideoHoverControls(mount);
+    wireWideDiagramImages(body);
   } catch (err) {
     body.innerHTML = loadFailedHtml(err);
   }

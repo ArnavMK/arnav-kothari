@@ -1,0 +1,10 @@
+## Board Descriptions
+This section gives a breif description of all the boards so that you have context for reading the next few files.
+
+- **Mae** — First contact with the guitar signal; the preamp board, and the analog section that makes this a hybrid amp. It's a simple JFET circuit into a differential driver, whose only job is to give the raw guitar signal a little saturation. That's something I can't simulate in firmware — it's extremely difficult and needs specialised hardware. The JFET responds uniquely to every player's technique, giving the amp real analog character.
+- **Shori** — The main board of the system. Handles the analog-to-digital conversion and back, plus all the digital signal processing required for the feature set. This is where the main firmware lives that does the tone generation. More detail on its board page.
+- **Gen** — The main power supply of the amp. Produces 24V, 9V and 5V for the rest of the amp. It's deliberately built as an external power supply, not inside the amp — like a laptop charger, but for the amp. This keeps all the power-supply switching noise completely outside the amp and away from the audio signals.
+- **Shoyu** — Takes the output from Shori and amplifies it to suit the FX12-X200 speaker's 8Ω impedance.
+- **Gamen** — UI controller board. Handles user interaction from the Waveshare touchscreen, communicates with Shori over UART, and passes along all the parameter changes and other commands. Will also carry a Bluetooth module and a MIDI system to connect to the footswitch pedal.
+- **Ashi** — The external footswitch pedal. Has a Bluetooth module and a MIDI system to connect to any device that accepts MIDI, not just Wave Forge. For the amp, it acts as an instant preset switcher.
+- **Pots** — The simplest board in the system. Just holds the rotary potentiometers for Gamen. Also acts as the screen mount and holds the whole UI assembly onto the amp head's front panel.
