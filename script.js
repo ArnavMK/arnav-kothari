@@ -1,8 +1,7 @@
 /**
  * Portfolio Script (home page)
  * - Renders project tiles from window.PROJECTS (see projects-data.js)
- * - Renders the intro tool-belt conveyor
- * - Scroll-triggered fade-in animations
+ * - Renders the intro tool-belt conveyor, and makes it draggable
  *
  * To add a project you only edit projects-data.js — never this file.
  */
@@ -119,30 +118,84 @@ function renderToolbelt() {
   items.forEach((t) => track.appendChild(createToolbeltItem(t)));
 }
 
-// ===== Scroll-triggered Fade-in =====
-function initScrollAnimations() {
-  const sections = document.querySelectorAll(".section:not(.intro-section)");
+// ===== Tool-belt conveyor: auto-scrolls forever, and can be dragged at
+// any time (mouse or touch) without pausing the auto-scroll — it just
+// picks up again from wherever you let go. =====
+function initConveyorDrag() {
+  const track = document.querySelector(".logo-conveyor-track");
+  if (!track) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-        }
-      });
-    },
-    {
-      threshold: 0.1,
-      rootMargin: "0px 0px -30px 0px"
+  const SPEED = 36; // px/second, roughly the old 40s-per-loop pace
+  let offset = 0; // current translateX, always kept within (-halfWidth, 0]
+  let halfWidth = 0; // width of one (of the two duplicated) copies
+  let dragging = false;
+  let pointerId = null;
+  let startX = 0;
+  let startOffset = 0;
+  let lastTime = null;
+
+  const measure = () => {
+    halfWidth = track.scrollWidth / 2;
+  };
+  measure();
+  if (window.ResizeObserver) {
+    new ResizeObserver(measure).observe(track);
+  } else {
+    window.addEventListener("resize", measure);
+  }
+
+  const wrap = () => {
+    if (!halfWidth) return;
+    while (offset <= -halfWidth) offset += halfWidth;
+    while (offset > 0) offset -= halfWidth;
+  };
+
+  const apply = () => {
+    track.style.transform = `translateX(${offset}px)`;
+  };
+
+  const frame = (time) => {
+    if (lastTime === null) lastTime = time;
+    const dt = (time - lastTime) / 1000;
+    lastTime = time;
+    if (!dragging) {
+      offset -= SPEED * dt;
+      wrap();
+      apply();
     }
-  );
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
 
-  sections.forEach((section) => observer.observe(section));
+  track.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    pointerId = e.pointerId;
+    track.setPointerCapture(pointerId);
+    startX = e.clientX;
+    startOffset = offset;
+    track.classList.add("dragging");
+  });
+
+  track.addEventListener("pointermove", (e) => {
+    if (!dragging || e.pointerId !== pointerId) return;
+    offset = startOffset + (e.clientX - startX);
+    wrap();
+    apply();
+  });
+
+  const endDrag = (e) => {
+    if (!dragging || e.pointerId !== pointerId) return;
+    dragging = false;
+    pointerId = null;
+    track.classList.remove("dragging");
+  };
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
 }
 
 // ===== Initialize =====
 document.addEventListener("DOMContentLoaded", () => {
   renderProjects();
   renderToolbelt();
-  initScrollAnimations();
+  initConveyorDrag();
 });

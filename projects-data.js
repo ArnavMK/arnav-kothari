@@ -11,16 +11,18 @@ window.PROJECTS = [
     thumbnail: "assets\\projects\\Mathcraft\\thumb.png",
     hero: "assets\\projects\\Mathcraft\\hero.png",
     overview: [
-      "Mathcraft is a web based graphing calculator inspired by the likes of Desmos, GeoGebra and SolidWorks.",
+      "<strong>Mathcraft</strong> is a web based graphing calculator inspired by the likes of Desmos, GeoGebra and SolidWorks.",
       `It's designed to be a simple and easy to use calculator that can help visualise Leaving Cert mathematics concepts.
       I built this for my own benefit since I needed a simple tool that explains only the exact concepts I need rather than a
       complex tool that has a lot of features I will never use.`,
       "Here are the main features used:",
-      "Graphing of functions, equations, conic sections like circles, ellipses, etc.",
-      "The ability to edit the equations and functions in real time and see the changes reflected on the graph.",
-      "SolidWorks Command System where you can select one of many actions to take on a selected graph.",
-      "Commands include: Intersection, Roots, Tangents, Symbolic differentiation, Line Segment, Line of Best fit, Maxima and Minima, mirror along x and y axes and more.",
-      "A search bar for searching the commands.",
+      `<ul>
+        <li>Graphing of functions, equations, conic sections like circles, ellipses, etc.</li>
+        <li>The ability to edit the equations and functions in real time and see the changes reflected on the graph.</li>
+        <li><strong>SolidWorks Command System</strong> where you can select one of many actions to take on a selected graph.</li>
+        <li>Commands include: Intersection, Roots, Tangents, Symbolic differentiation, Line Segment, Line of Best fit, Maxima and Minima, mirror along x and y axes and more.</li>
+        <li>A search bar for searching the commands.</li>
+      </ul>`,
     ],
     gallery: [
       "assets\\projects\\Mathcraft\\1.png",
@@ -92,12 +94,16 @@ window.PROJECTS = [
       This is a multi-board, feature-dense guitar amplifier. I made this project to combine all the tools and software I
       use to get my guitar tone into one singular device, and also as a first real end-to-end project that will teach me everything about audio hardware and firmware.`,
       "The main features of this project are as follows:",
-      "An amp head and a cabinet separation. The audio DSP, convolution transforms, preamp, guitar input, the screen controller, etc., live in the amp head, whereas the cabinet contains the audio power amplifier board that feeds into a 12-inch FX12-F200 speaker.",
-      "The whole amp will be powered by an external custom power supply that takes in mains voltage and gives out 5V for DSP and screen controller, 9V for preamp, 24V for the power amplifier.",
+      `<ul>
+        <li><strong>Amp head and cabinet separation.</strong> The audio DSP, convolution transforms, preamp, guitar input, the screen controller, etc., live in the amp head, whereas the cabinet contains the audio power amplifier board that feeds into a 12-inch FX12-F200 speaker.</li>
+        <li><strong>Custom external power supply</strong> that takes in mains voltage and gives out 5V for DSP and screen controller, 9V for preamp, 24V for the power amplifier.</li>
+      </ul>`,
       "As for the UI and audio control features:",
-      "It will have the ability to change all amp and cab parameters in real time, load different impulse responses, save and load presets that store the tone you created, have a suite of standard effect pedals like delay, overdrive, chorus and reverb, etc.",
-      "It will also have the ability to connect to an external foot-switch pedal, where each foot switch can be linked to a saved preset, hence when you press the button, it will instantly change to that saved preset tone. This helps avoid looking and changing the settings directly on the amp when you are performing a known song.",
-      "To set the presets to the switches, there will be a section in the UI that will show the 2D mockup of the pedal and you can assign presets that way, so when the MIDI from the pedal arrives with a certain value, it will switch to that assigned preset."
+      `<ul>
+        <li>The ability to change all amp and cab parameters in real time, load different impulse responses, save and load presets that store the tone you created, and a suite of standard effect pedals like delay, overdrive, chorus and reverb, etc.</li>
+        <li>An external <strong>foot-switch pedal</strong> connection, where each foot switch can be linked to a saved preset, hence when you press the button, it will instantly change to that saved preset tone. This helps avoid looking and changing the settings directly on the amp when you are performing a known song.</li>
+        <li>To set the presets to the switches, there will be a section in the UI that will show the 2D mockup of the pedal and you can assign presets that way, so when the MIDI from the pedal arrives with a certain value, it will switch to that assigned preset.</li>
+      </ul>`
     ],
     gallery : [
       "assets\\projects\\wave-forge\\Timeline\\mae.jpeg",
@@ -157,13 +163,36 @@ window.PROJECTS = [
     ],
     timeline: [
       {
+        date: "October 2026",
+        title: "Mae Breadboard Testing and First Audio Samples",
+        text : [
+          "The first week of October i decided to finally breadboard Mae rev 1, the Jfet premap side of the circuit that is. The goals of the bread-boarding session was to make sure the circuit is correct, find the values of Source resistance and the Drain resistance. And to get an extremely subtle saturation effect. So the audio would be completely clean and will add a bit of distorted saturation when i dig in really hard on the hottest pick up of the guitar.",
+          "My plan was to get that tone while keeping the drain voltage at 4.8V (middle of the voltage supply) so that the output had enough headroom to swing. ITs the standard thing to do. But i found that it was extremely hard to achieve that and also maintain that subtle saturation tone that i mentioned earlier. hence i decided to go with an off centered JFET drain voltage which gave me the desired tone with assymtericaly clipped stauration. The output level ended up being around 600mV to 1V peak",
+          "The values for the source resistor is 5.1K, drain resistance is 22K, Vdrain is 8.1V, output level nominal playing 300-400mV, output level peak is 600mV - 1V.",
+          "Here are some recorded samples from mae. First listen to the dead simple raw DI signal from the guitar",
+          `<audio controls src="assets/projects/wave-forge/audio/raw_guitar.wav">DI track</audio>`,
+          "The same track through mae, you will notice it much louder (due to 2x gain with 22K load) and has a hint of saturation on peak notes",
+          `<audio controls src="assets/projects/wave-forge/audio/mae_raw.wav">Mae track</audio>`,
+          "The following track is mae running through a neural DSP plugin: Archetype Nolly.",
+          `<audio controls src="assets/projects/wave-forge/audio/mae_nolly.wav">Mae through nolly track</audio>`,
+
+        ],
+        images: [
+          { src: "assets\\projects\\wave-forge\\Timeline\\mae_breadboard_jfet.jpg", title: "JFET on the breadboard" },
+          { src: "assets\\projects\\wave-forge\\Timeline\\mae_breadboard.jpg", title: "Mae breadboard" },
+          { src: "assets\\projects\\wave-forge\\Timeline\\mae_preamp_schems.png", title: "Mae Preamp schematics" }
+        ]
+      },
+
+      {
         date: "September 2026",
         title: "Gen Power Supply Assembly and Shori Rev 4 Issues",
         text : [
           "This Monday, 21st of September, I received the boards and components from JLCPCB and DigiKey. This order contained components for Gen Rev 2 and Shori Rev 4. Then the next day on Tuesday I reflowed Gen using my hotplate and solder paste. This was my first time ever assembling a PCB like this with small components.",
           "Unfortunately, for Shori I found some issues with Rev 4. The power circuitry needs to be revisited because I saw that currently it goes straight through the audio codec and then to the STM32. This way whenever the MCU draws spikes of current, it goes through the codec, inducing it with a lot of noise. Hence the idea is to follow a split power routing strategy.",
           "Another issue from Rev 4 is component-related. The NE3552 opamp is a dual-supply IC, where it requires V+ and V-. However, in Shori the V+ is 5V and V- is ground reference of 0V, hence the opamp will operate on the new VBIAS = 2.3V. This is way below operational voltages. The thing won't even power on. Hence I then found a direct replacement single-supply opamp, the OPA1692ID.",
-          "Coming back to Gen assembly. For my first time soldering using the hotplate, it was a really good pass, although it seems like the board was not completely flush with the hotplate, causing the solder to melt at different rates. After finishing a reflow session I looked through the board and found a potential short, a resistor completely flipped from its original position, some other passives misaligned, but the buck converter IC both look fine."
+          "Coming back to Gen assembly. For my first time soldering using the hotplate, it was a really good pass, although it seems like the board was not completely flush with the hotplate, causing the solder to melt at different rates. After finishing a reflow session I looked through the board and found a potential short, a resistor completely flipped from its original position, some other passives misaligned, but the buck converter IC both look fine.",
+          
         ],
         images: [
           { src: "assets\\projects\\wave-forge\\Timeline\\Gen_pcb_1.jpeg", title: "Gen Rev 2 assembled" },
@@ -222,11 +251,13 @@ window.PROJECTS = [
     hero: "assets\\projects\\ground-station\\hero.png",
     overview: [
       "We've spent the last couple of months building a ground station suite that receives and displays telemetry from HiPR's flight computers: Ogma, Eggtimer, Vega and a lot more to come!",
-      "The suite has two parts: Gameboy, a handheld receiver unit, and CyberDeck, the central display station they all connect back to.",
+      "The suite has two parts: <strong>Gameboy</strong>, a handheld receiver unit, and <strong>CyberDeck</strong>, the central display station they all connect back to.",
       "The Gameboy is built around an Adafruit KB2040 with a modular cartridge system. A cartridge is a small daughterboard tailored to one flight computer's radio protocol, so the same handheld mainboard can receive from completely different systems just by hot-swapping the cartridge:",
-      "Ogma cartridge — SPI-direct to a LoRa module, matching Ogma's own transceiver.",
-      "Eggtimer cartridge — a self-contained Eggfinder RX module, UART out.",
-      "Vega cartridge — our newest build: a custom PCB around a bare STM32G071 and a Semtech SX1280, with open source telemetry firmware from CATS Vega themselves.",
+      `<ul>
+        <li><strong>Ogma cartridge</strong> — SPI-direct to a LoRa module, matching Ogma's own transceiver.</li>
+        <li><strong>Eggtimer cartridge</strong> — a self-contained Eggfinder RX module, UART out.</li>
+        <li><strong>Vega cartridge</strong> — our newest build: a custom PCB around a bare STM32G071 and a Semtech SX1280, with open source telemetry firmware from CATS Vega themselves.</li>
+      </ul>`,
       "Each Gameboy has its own small screen and battery, and can be used completely standalone in the field for a quick read on a single flight computer.",
       "The CyberDeck is a Raspberry Pi 5 with a touchscreen, running a custom dashboard we built from scratch, fitted into a NANUK case for the looks. Multiple Gameboys connect to the CyberDeck at once via the Toaster, a USB hub and charging distribution board that lets several units plug in simultaneously — each showing up as its own independent tab on screen automatically, all through just one port on the Pi 5.",
       "The whole point of building this modular is that it never has to be \"finished\" — every new requirement just becomes another plug-and-play piece rather than a massive rebuild. For example, we're working on a live video streaming module that will plug into the CyberDeck like any other Gameboy."

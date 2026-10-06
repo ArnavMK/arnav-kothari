@@ -5,7 +5,7 @@
 **Mae Rev 1** is the blue board shown below.
 
 ![Mae Rev 1](assets/projects/wave-forge/Timeline/mae.jpeg)
-
+<audio controls src="assets/projects/wave-forge/mae_audio.mp3">
 ## What to cover
 
 - The board's job in the signal chain

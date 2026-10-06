@@ -108,7 +108,7 @@ This was my first ever board that i assembled with solder paste and hotplate wit
 
 After the first reflow, I saw that some solder paste was taking longer to melt than the rest, particularly under the inductor. It has the biggest pads and connects to a large copper pour, so it pulls heat away from the joint faster than the plate delivers it — that behavior was expected
 
-I saw that some passives were wonky. That one was R9, the top resistor of Buck A's feedback divider, which is the component that sets the 5.3V output. If it had gone unnoticed, the converter would have seen a broken divider, read the output as too low, and driven the duty cycle to maximum — putting something close to 24V onto the 5V rail and into Shori. I fixed it with a soldering iron and a steady hand, then measured both dividers (107kΩ / 13.7kΩ and 178kΩ / 22.1kΩ) before applying any power
+I saw that some passives were wonky. One was displaced so badly that it turned 90 degrees and got soldered to an adjacent capacitor. That one was R9, the top resistor of Buck A's feedback divider, which is the component that sets the 5.3V output. If it had gone unnoticed, the converter would have seen a broken divider, read the output as too low, and driven the duty cycle to maximum — putting something close to 24V onto the 5V rail and into Shori. I fixed it with a soldering iron and a steady hand, then measured both dividers (107kΩ / 13.7kΩ and 178kΩ / 22.1kΩ) before applying any power
 
 After assembly I powered the board with the DC barrel Jack, and took measurements, right off the bat i saw all three indicator LED lit up.
 

@@ -58,28 +58,16 @@ const renderMarkdown = (value) => {
   return typeof marked !== "undefined" ? marked.parse(text) : toParagraphs(text);
 };
 
-/* Markdown image paths are written root-relative like everywhere else on
-   the site (e.g. "assets/projects/x/1.jpg"), but the browser would
-   otherwise resolve them against this page's own folder. Rewrite every
-   rendered <img src> through the same asset() helper used everywhere. */
-const fixMarkdownImagePaths = (html) => {
-  const wrap = document.createElement("div");
-  wrap.innerHTML = html;
-  wrap.querySelectorAll("img[src]").forEach((img) => {
-    let src = img.getAttribute("src");
-    // Markdown treats a lone "\" as an escape character, so a Windows path
-    // like "assets\projects\x.png" survives that as-is, but "assets\\projects\\x.png"
-    // (backslashes doubled, e.g. pasted straight from a JS string) gets
-    // unescaped to single backslashes — then marked percent-encodes those
-    // as %5C before we ever see them. Undo that so asset() can normalise
-    // the (now real) backslashes into forward slashes as usual.
-    try {
-      src = decodeURIComponent(src);
-    } catch (e) {}
-    img.setAttribute("src", asset(src));
-  });
-  return wrap.innerHTML;
-};
+/* Markdown asset paths (images, and <audio>/<source> for embedded audio
+   samples) are written root-relative like everywhere else on the site
+   (e.g. "assets/projects/x/1.jpg"), but the browser would otherwise
+   resolve them against this page's own folder. fixAssetSrcs (common.js)
+   rewrites every src through the same asset() helper used everywhere; the
+   decodeURIComponent below undoes Markdown's own backslash-escaping of a
+   Windows path (e.g. "assets\\projects\\x.png" pasted straight from a JS
+   string) before that happens, since marked percent-encodes those as %5C
+   otherwise. */
+const fixMarkdownImagePaths = (html) => fixAssetSrcs(html);
 
 /* A run of images with nothing else between them — either on consecutive
    lines (one paragraph, <br>-separated, since breaks:true is on) or
@@ -320,6 +308,7 @@ function mountExplorer(container, project, folders) {
     body.innerHTML = html;
     wireVideoHoverControls(body);
     wireWideDiagramImages(body);
+    wireAudioPlayers(body);
 
     // Opening a document from further down the page shouldn't leave you
     // staring at the middle of it — jump back to the top of the pane.
@@ -381,6 +370,7 @@ async function init() {
         : groupConsecutiveImages(fixMarkdownImagePaths(renderDetailsList(details)));
     wireVideoHoverControls(mount);
     wireWideDiagramImages(body);
+    wireAudioPlayers(body);
   } catch (err) {
     body.innerHTML = loadFailedHtml(err);
   }

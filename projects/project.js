@@ -153,9 +153,7 @@ function renderProject(project) {
         : ""
     }
 
-    <div class="project-body">
-      ${hasOverview ? `<h2>Overview</h2>${toParagraphs(project.overview)}` : ""}
-    </div>
+    ${hasOverview ? `<div class="project-body"><h2>Overview</h2>${toParagraphs(project.overview)}</div>` : ""}
 
     ${mediaGrid(project.gallery, "project-gallery")}
 
@@ -176,6 +174,7 @@ function init() {
   wireVideoHoverControls(mount);
   wireAdaptiveTimelineImages(mount);
   wireTimelineToggle();
+  wireAudioPlayers(mount);
 }
 
 document.addEventListener("DOMContentLoaded", init);

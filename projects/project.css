@@ -80,7 +80,124 @@
   font-size: 1.05rem;
   line-height: 1.8;
   margin-bottom: 1.1rem;
-  max-width: 80ch;
+  max-width: 100ch;
+}
+
+.project-body strong,
+.timeline-text strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.project-body ul,
+.project-body ol {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin: 0 0 1.1rem;
+  padding-left: 1.4rem;
+  max-width: 100ch;
+}
+
+.timeline-text ul,
+.timeline-text ol {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin: 0 0 0.9rem;
+  padding-left: 1.3rem;
+}
+
+.project-body li,
+.timeline-text li {
+  margin-bottom: 0.4rem;
+}
+
+/* A minimal custom player for embedded audio samples (<audio src="...">
+   dropped directly into overview/timeline text or a Markdown file — see
+   wireAudioPlayers in common.js, which replaces the bulky native controls
+   with this bar: a round play button, a slim seek line, elapsed time. */
+.audio-player {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 360px;
+  margin: 0.75rem 0 1.1rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.audio-player-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: filter var(--transition);
+}
+
+.audio-player-btn:hover {
+  filter: brightness(1.08);
+}
+
+.audio-player-btn svg {
+  width: 12px;
+  height: 12px;
+  margin-left: 1px;
+}
+
+.audio-player-seek {
+  flex: 1;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--border-strong);
+  outline: none;
+  cursor: pointer;
+}
+
+.audio-player-seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.audio-player-seek::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.audio-player-seek::-moz-range-track {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--border-strong);
+}
+
+.audio-player-time {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  min-width: 2.4em;
 }
 
 /* ===== Deep Dive Markdown typography ===== */
