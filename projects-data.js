@@ -167,7 +167,10 @@ window.PROJECTS = [
         title: "Mae Breadboard Testing and First Audio Samples",
         text : [
           "The first week of October i decided to finally breadboard Mae rev 1, the Jfet premap side of the circuit that is. The goals of the bread-boarding session was to make sure the circuit is correct, find the values of Source resistance and the Drain resistance. And to get an extremely subtle saturation effect. So the audio would be completely clean and will add a bit of distorted saturation when i dig in really hard on the hottest pick up of the guitar.",
-          "My plan was to get that tone while keeping the drain voltage at 4.8V (middle of the voltage supply) so that the output had enough headroom to swing. ITs the standard thing to do. But i found that it was extremely hard to achieve that and also maintain that subtle saturation tone that i mentioned earlier. hence i decided to go with an off centered JFET drain voltage which gave me the desired tone with assymtericaly clipped stauration. The output level ended up being around 600mV to 1V peak",
+          "My plan was to get that tone while keeping the drain voltage at 4.8V, the middle of the supply, so the output had maximum headroom to swing. That's the standard thing to do.",
+          "What I found is that centring the bias and getting the tone I wanted are in direct conflict. To put 4.8V across a 22k drain resistor, the JFET has to draw around 218µA. The transconductance of a JFET rises with drain current, and the stage's gain is roughly gm × R2 — so centring the bias forces a gain, and I don't get to choose it independently. At that current, normal picking was already pushing the stage into audible crunch.",
+          "Starving the JFET down to 68µA drops the transconductance substantially, which drops the gain, which is what gives a clean signal at normal playing levels. So the off-centre drain voltage isn't really the goal it's the consequence of choosing a low operating current for the gain I wanted",
+          "The trade-off I accepted is asymmetric headroom: there's less room above the bias point than below, so clipping arrives earlier and only on one half of the waveform. Asymmetric clipping generates even-order harmonics, which is the warmer-sounding kind, and it's something tube circuits are often deliberately built to do.",
           "The values for the source resistor is 5.1K, drain resistance is 22K, Vdrain is 8.1V, output level nominal playing 300-400mV, output level peak is 600mV - 1V.",
           "Here are some recorded samples from mae. First listen to the dead simple raw DI signal from the guitar",
           `<audio controls src="assets/projects/wave-forge/audio/raw_guitar.wav">DI track</audio>`,
@@ -248,7 +251,7 @@ window.PROJECTS = [
     title: "HiPRDeck",
     category: "Ground Station Suite for all things rocket.",
     thumbnail: "assets\\projects\\ground-station\\thumb.png",
-    hero: "assets\\projects\\ground-station\\hero.png",
+    hero: "assets/projects/ground-station/Timeline/full_assmebly.jpg",
     overview: [
       "We've spent the last couple of months building a ground station suite that receives and displays telemetry from HiPR's flight computers: Ogma, Eggtimer, Vega and a lot more to come!",
       "The suite has two parts: <strong>Gameboy</strong>, a handheld receiver unit, and <strong>CyberDeck</strong>, the central display station they all connect back to.",
@@ -288,9 +291,29 @@ window.PROJECTS = [
       { src: "assets\\projects\\ground-station\\Timeline\\SPI_adapter_pcb.png", title: "SPI Cartridge" },
       { src: "assets\\projects\\ground-station\\Timeline\\gameboy_rev1.png", title: "Gameboy Rev 1 CAD" },
       { src: "assets\\projects\\ground-station\\Timeline\\gameboy_ccad.png", title: "Gameboy Rev 2 CAD" },
-      { src: "assets\\projects\\ground-station\\Timeline\\gameboy_pcb.png", title: "Gameboy Rev 2 PCB" }
+      { src: "assets\\projects\\ground-station\\Timeline\\gameboy_pcb.png", title: "Gameboy Rev 2 PCB" },
+      { src: "assets\\projects\\ground-station\\Timeline\\Another_Toaster_CAd.png", title: "Toaster CAD (Another Angle)" },
+      { src: "assets\\projects\\ground-station\\Timeline\\UI.png", title: "Big Daddy Ground Station UI — Altitude and Velocity Comparison" },
+      { src: "assets\\projects\\ground-station\\Timeline\\bodge.jpeg", title: "Gameboy Main Board Bodge Wire (Under Magnification)" },
+      { src: "assets\\projects\\ground-station\\Timeline\\full_assmebly.jpg", title: "Full CyberDeck and Gameboy Assembly" },
+      { src: "assets\\projects\\ground-station\\Timeline\\group_photo.jpg", title: "With the CyberDeck in the Workshop" }
     ],
     timeline: [
+      {
+        date: "October 2026",
+        title: "Completed Vega Radio and Preleminary Assembly Of Cyber Deck",
+        text: [
+          "Following up from the previous month's work on the CATS vega cartridge, I finished its assembly and started to bring the board up and write the firmware. I found many issues even with such a simple board. First one being that i messed up the RX and TX connection from the cartrdige to the gameboy conenctor, there was no TX/RX switch happening at all in the signal routes. Hence i decided to add two bodge wires on the gameboy itself, since i did not want to mess up the stm32 on the cartridge.",
+          "The next issue and a big one was i forgot to add a 10K pull up resistor on the NRST line. That caused the stm32 to be asleep even when the power is on, because the NRST voltage threshold was not met due to the missing resistor. There is a very weak internal pull up that was not enough for it to start. But a really decieving thing was when i plugged in the ST debugger to see whats wrong, the stm32 woke up perfectly but when it was not connected it was asleep. This was because the debugger manually pulls up the NRST line at 3.3V no matter if there is a pull up on the board or not. But i added a through hole resistor and it was grand after that.",
+          "Finally after those fixes, the stm32 woke up while being powered independent of the Debugger. Nextstep was firmware, luckily that cats-telemetry firmware was open source, all i had to do is change a few pin definitions and change peripheral initializations to get the vega working. I flashed the cats vega with the Link phrase - veag1 - through the tx line of the gameboy, so you can change link phrases on the spot without needing to open up a laptop and flash",
+          "Next big thing we acoomplished was the assembly of the Cyber deck. We assembled the enitre system from the keybaord, screen. pi5 holder, batteries and all the connectors on the cyberdeck. Its now 90% complete, the wire inside ended up being short and couldnt connect to the inter usb ports on the pi5, so the gameboy still was not able to connect to the pi5. But thats an easy fix which we will work on next."
+        ],
+        images: [
+          {src: "assets/projects/ground-station/Timeline/full_assmebly.jpg"},
+          {src: "assets/projects/ground-station/Timeline/group_photo.jpg"},
+          {src: "assets/projects/ground-station/Timeline/bodge.jpeg"}
+        ]
+      },
       {
         date: "September 2026",
         title: "Acquired Radio Module And Completed The Vega Cartridge Hardware Section",
@@ -370,5 +393,41 @@ window.PROJECTS = [
         ]
       }
     ]
+  },
+
+  // ==========================================================================
+  // STROFI - QUANTUM MAGNETOMETER PAYLOAD
+  // ==========================================================================
+  {
+    id: "strofi",
+    title: "Strofi",
+    category: "Quantum Magnetometer Payload",
+    thumbnail: "assets/projects/strofi/thumbnail.png",
+    hero: "assets/projects/strofi/hero.jpg",
+    overview: [
+      "For this year's EuRoC competition, I wanted to go all out and try my best to create a good payload and get recognition. Hence i decided to make an ODMR quantum magnetometer. I got this idea from listening to a talk at the Eirseds Irish space conference in October 2026. They talked about the OSCAR-QUBE project and how they made a quantum magnetometer cube sat for the ISS. It was launched in 2021 and ran for 10 months gathering usefull data about the earths magnetic field.",
+      "I nevert thought of making something related to quantum mechanics, hence i did some reaserch and found that there is a whole world of quantum sensors that i can play around with.",
+      "The purpose of the payload is to prove that quantum sensors can be flown in a student built rocket, and to provide an accurate measurement of the vehical's environmnetal magnetic field and drift free attitude reference of the rocket to verify the controll systems if any. No student team has ever flown a compact quantum magnetometer hence there are no projects or aretefacts"
+    ],
+    gallery: [],
+    links: [],
+    timeline: [
+      {
+        date: "October 2026",
+        title: "Reseaching Quantum Sensors and Sponsorhsip From Element Six",
+        text: [
+          "For EuRoC 2027, I have my heart set on making a quantum magnetometer fly on our rocket. The only instance w=i could find that a qunatum magnetometer was flown is the OSCAR-CUBE in 2021, It was a 1U cube sat quantum magnetometer made to be boarded to the ISS. The scientific proposal of this paylaod is to achieve a drift free attitude and roll reference of the vehical and prove that quantum sensors can be flown in student rockets.",
+          "A quantum magnetometer uses a special synthetic diamond with some impurities in it. Specifically when a nitrogen atom is bonded to 3 carbon atoms but not a 4th, causing a vacancy. These vacant spaces are called NV centers. Electrons can be trapped in those vacancies and hold a spin state which can be either 0, 1 or -1. When green laser/led shines on the NV centers, the get energy and get excited. To balance things they need to come dowm. They do that in two ways, either by emitting a photon without any changes to its spin state, or by moving to a singlet state (unique state where no photon emission is required) and then change there spin state back to almost always ms = 0. Hence the first route is brighter and the second is dimmer.",
+          "Which route the electron takes from those two are totaly dependent on the spin state. If the spin state is ms = +- 1 then it takes the darker route, and if its ms = 0 it takes the brighter route. But the cool thing is all the electrons that took the dimmer route changed there spin states to ms = 0. So essentially the whole diamond is fileld with ms = 0 nv centers now.",
+          "Thats where an oscialting microwave frequency comes in. A resonant microwave frequency resets the states to ms = +- 1. Since the existance of those ms = -+ 1 is the reason for the dimmed flourescence, it will occur during every cycle of this process. That causes the dim to be a continous occurance that can be measured through a photodiode. Eevery dim can now be paired with the microwave frequency it was sensed at. Those are called dips in the ODMR graph. The change in frequency recorded between those dips is proportionally related to the magnetic field the sensor is exposed to. And thats a quantum magnetometer.",
+          "To get started on this project, i first of all needed to prove that this physics works when i do it in a lab setting on the bench. Hence i needed to source a diamond. I found a company called Element Six that make these synthetic diamonds specifically for quantum sensing. I emailed there marketing team, talked about my project and offered a sponsorship proposal. To my surprise they replied the next day offering me a DNV-B14 3mm x 3mm x 0.5mm with a 4.5ppm density. Thats like the highest quality diamond you could ever ask for in this genre of phsyics. I was over the moon!"
+        ],
+        images: [
+          {src: "assets/projects/strofi/Timeline/oscar-cube.png", title: "OSCAR-CUBE that was boarded onto the ISS and in orbit for 10 months"},
+          {src: "assets/projects/strofi/Timeline/diamond.png", title: "Element six DNV-B14 diamond"},
+        ]
+      }
+    ]
   }
+
 ];
