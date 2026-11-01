@@ -39,22 +39,48 @@ window.PROJECTS = [
 
 
   // ==========================================================================
-  // ASHI - BLUETOOTH POWERED MIDI FOOTSWITCH PEDAL
+  // COMET AZUR - First L1 Rocket.
   // ==========================================================================
   {
-    id: "ashi",
-    title: "Ashi",
-    category: "Bluetooth Powered MIDI Footswitch Pedal",
-    thumbnail: "https://placehold.co/800x600/eeeeee/999?text=Ashi",
-    hero: "https://placehold.co/1400x700/eeeeee/999?text=Ashi",
+    id: "comet-azur",
+    title: "Comet Azur",
+    category: "First Certified L1 Rocket",
+    thumbnail: "assets\\projects\\comet-azur\\thumb.png",
+    hero: "assets\\projects\\comet-azur\\hero.jpeg",
     overview: [
-      "Replace this with the story of the project."
+      "This was my very first rocket i ever made and launched in August 2026. The rocket is named 'Comet Azur' taken from the absolutely broken spell from Elden Ring.",
+      "This Rocket was made in junction with my university's rocketry team ULAS HiPR. They started running an L1 workshop series where more than 60 of us built and launched our own rockets and get certified for the L1 certificates. ULAS HiPR provided all the material and access to the motors through Irish rocketry and we built the rocket ourselves using open rocket.",
+      "We used a Solid H Motor so it was a single use black poweder charge. hence there was no real need for any flight computer and electronics. But now since i have gotten extremely involved in the team and run the electronics department alongside a freind, I am very intersted in making my own L2 rocket to go up 2.5 - 3K and test my new paylaod ideas and ground station."
     ],
     gallery: [],
     links: [],
     details: [],
-    fullGallery: [],
-    timeline: []
+    fullGallery: [
+      { src: "assets\\projects\\comet-azur\\thumb.png", title: "Comet Azur, Laid Out on the Grass" },
+      { src: "assets\\projects\\comet-azur\\hero.jpeg", title: "The L1 Workshop Group with Their Rockets" },
+      { src: "assets\\projects\\comet-azur\\in-house.jpeg", title: "Finished Build, Ready to Travel to the Launch Site" },
+      { src: "assets\\projects\\comet-azur\\launch-pred.jpeg", title: "On the Rail, Final Checks Before Launch" },
+      { src: "assets\\projects\\comet-azur\\after-launch.jpeg", title: "Recovered After Flight" },
+      { src: "assets\\projects\\comet-azur\\after-launch2.jpeg", title: "Recovered After Flight" },
+      { src: "assets\\projects\\comet-azur\\launch.mp4", title: "Launch" }
+    ],
+    timeline: [
+      {
+        date: "August 15th" ,
+        title: "Built and Launched My first L1 - Comet Azur",
+        text: [
+          "This was my very first rocket i ever made and launched in August 2026. The rocket is named 'Comet Azur' taken from the absolutely broken spell from Elden Ring.",
+          "This Rocket was made in junction with my university's rocketry team ULAS HiPR. They started running an L1 workshop series where more than 60 of us built and launched our own rockets and get certified for the L1 certificates. ULAS HiPR provided all the material and access to the motors through Irish rocketry and we built the rocket ourselves using open rocket.",
+          "We used a Solid H Motor so it was a single use black poweder charge. hence there was no real need for any flight computer and electronics. But now since i have gotten extremely involved in the team and run the electronics department alongside a freind, I am very intersted in making my own L2 rocket to go up 2.5 - 3K and test my new paylaod ideas and ground station.",
+          "The rocket was launched in belfast in junction with Irish rocketry and ULAS Hipr. One of the best days of my life. The feeling of seeing something you made fly up at Mach 1 is something else."
+        ],
+        images: [
+          { src: "assets\\projects\\comet-azur\\after-launch copy.jpeg", title: "On the rail, final checks before launch" },
+          { src: "assets\\projects\\comet-azur\\launch-pred.jpeg", title: "Recovered after flight" },
+          { src: "assets\\projects\\comet-azur\\launch.mp4", title: "Launch" },
+        ]
+      }
+    ]
   },
 
 

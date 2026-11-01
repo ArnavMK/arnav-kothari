@@ -98,6 +98,28 @@ const mediaGrid = (items, className, opts) => {
   return `<div class="${className}">${items.map((item) => mediaFrame(item, opts)).join("")}</div>`;
 };
 
+/* Every context (project gallery, timeline, full gallery) boxes a video
+   into a fixed landscape ratio by default, since the real dimensions
+   aren't known until it loads — fine for typical screen-recorded or
+   horizontal footage, but a portrait phone video (e.g. held upright to
+   film a launch) gets crushed into that wide box with huge letterboxing on
+   both sides. Once the video reports its real width/height, size its frame
+   to match instead, the same "use the real aspect ratio" idea already
+   applied to photos (see wireAdaptiveTimelineImages in project.js). */
+function wireAdaptiveVideoAspect(root) {
+  root.querySelectorAll(".media-frame video").forEach((video) => {
+    const frame = video.closest(".media-frame");
+    if (!frame) return;
+    const apply = () => {
+      if (video.videoWidth && video.videoHeight) {
+        frame.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
+      }
+    };
+    if (video.readyState >= 1) apply();
+    else video.addEventListener("loadedmetadata", apply);
+  });
+}
+
 /* Show a video's native controls only while the pointer is over it. */
 function wireVideoHoverControls(root) {
   root.querySelectorAll(".video-frame").forEach((frame) => {

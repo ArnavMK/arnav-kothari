@@ -172,6 +172,7 @@ function init() {
   mount.innerHTML = renderProject(project);
 
   wireVideoHoverControls(mount);
+  wireAdaptiveVideoAspect(mount);
   wireAdaptiveTimelineImages(mount);
   wireTimelineToggle();
   wireAudioPlayers(mount);

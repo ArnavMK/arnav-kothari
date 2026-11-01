@@ -36,6 +36,7 @@ function init() {
   mount.innerHTML = renderGallery(project);
 
   wireVideoHoverControls(mount);
+  wireAdaptiveVideoAspect(mount);
 }
 
 document.addEventListener("DOMContentLoaded", init);
