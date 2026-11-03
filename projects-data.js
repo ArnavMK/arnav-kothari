@@ -85,22 +85,41 @@ window.PROJECTS = [
 
 
   // ==========================================================================
-  // CEOL - TELEMETRY SONIFICATION PAYLOAD
+  // CORNSTAR - POPCORN MACHINE PAYLOAD
   // ==========================================================================
   {
-    id: "ceol",
-    title: "Ceol",
-    category: "Telemetry Sonification Payload",
-    thumbnail: "https://placehold.co/800x600/eeeeee/999?text=Ceol",
-    hero: "",
+    id: "cornstar",
+    title: "Cornstar",
+    category: "Popcorn Machine Payload IREC 2027",
+    thumbnail: "assets\\projects\\cornstar\\thumb.png",
+    hero: "assets\\projects\\cornstar\\hero.png",
     overview: [
-      "Replace this with the story of the project."
+      "This year in 2027 My university's rocketry team ULAS HiPR is planning to join IREC in texus. For Its payload i wanted to go a bit on the quirky more funnier route, Like how BPS space did with the meat rocket haha. So me and my bud donnacha decided to make an actual standalone popcorn machine to fly in IREC as its payload",
+      "This purely started out as a complete joke, but the more we looked and researched into this the more it became interesting. We found that project was not gonna be simple at all, and it had a whole scientific aspect to it aswell. This is going to be the world's first ever popcorn machine to fly in a student rocket at a competition.",
+      "The purpose of this payload is to test the effects of change in ambient pressure on the popping of maize kernals. theoretically due to the low external pressure the popcorns should pop earlier, at lower temp, and be much bigger as compared to a batch cooked on the ground. We will record the temperature, time, pressure and a video of the insides of the chamber in which the popcorn is held."
     ],
     gallery: [],
     links: [],
     details: [],
     fullGallery: [],
-    timeline: []
+    timeline: [
+      {
+        date: "October 2026 " ,
+        title: "I Wanted To Eat Some Popcorn, So Why Not Make The Machine And Fly It In A Rocket?",
+        text: [
+          "What started as joke completely took over my brain and my existence for the past month. All i could think about how to manage the heating element, chamber pressure, steam venting and so much more. I started tackeling the most important thing first. Heating and Flight safety. Hence i started working on the controller board first.",
+          "The board consists of an STM32G431RBT6 as the main controller. BMI270 IMU, MS5803 barometric pressure sensor, MAX31855 thermocouple interface and a NOR flash. On the power side the board will be powered through a 3S Li-ion battery pack giving out upto 5A and 14V, that is dropped down to 5V and 3.3V for rest of the system.",
+          "The heater driver consists of low-side mosfet driven through a PWM signal from the MCU, and a high side mosfet acting as an arming signal also wired to the MCU. The whole system will be armed at the pad through a screw switch acting as the on off switch for the project. The heater will only start after the MCU sees rise in baro altitude and also acceleration above 3g for 100ms.",
+          "As for the chamber design, mechanics and insulation. Our current plan is -- A cylindrical aluminum chamber (~3mm thick) coverd through a sheet of mica, over which coils of nichrome wire wrapped around the whole chamber to give unifiorm heating. The nichrome shorts with aluminum so the mica is necessary. Above the coil will be a layer of cement potting all around. Above that will be 10-15mm of aerogel insulation as the final wall.",
+          "Through all those layers there will be transparent vents through which a camera will be recording all the events. And a chamber LED aswell to light it up for the camera. The chamber's bare aluminum will be connected to a thermocouple on the main board for temperature sensing. And the whole chamber will be grounded via a ring terminal and washer on the main board."
+
+        ],
+        images: [
+          {src: "assets\\projects\\cornstar\\thumb.png", title: "Controller Board CAD"},
+          {src: "assets\\projects\\cornstar\\pcb.png", title: "Controller Board PCB"},
+        ]
+      }
+    ]
   },
 
 
@@ -438,6 +457,20 @@ window.PROJECTS = [
     gallery: [],
     links: [],
     timeline: [
+      {
+        date: "Halloween 2026",
+        title:"Deciding a plan for Bench Rig and TIA Test Board Design",
+        text: [
+          "The more I researched into this project the more i found out how hard this was gonna be. Hence i needed to tackle this step by step and proving each subsection on its own first. So i made a Bench Rig guidelines to follow. It constists of all the stages that i need to pass to prove that this project can and will work. I would start with the most simplest and known section first that will move me forwards to getting a dip in flouresence on the bench. After that i will know exactly what all the problems exist in my components selection, stack design etc.. Like Low LED power, not rnough photons being detected, filter glass noise etc..",
+          "The first stage is to prove the TIA and photodiode dectection works. Hence i made a simple TIA test board. This is actuall extremely close to the final TIA board on the stack. The test board consists of a transimpedance enabled opamp OPA2380 dual chanel, Two BPW34 photodiodes, one for the main signal and the other for reference, these two will be used to cancel out any noise from the photodiodes themselves nad show the remaining noise from the electronics and the board itself.",
+          "The main purpose of this test board is to find a proper Cf value to prevent ringing and oscilating of the SW node, and to find a suitable Rf value to test on the bench. Since All the light intensity i will test with on the bench for now will not be the red flouresence from the diamond. Hence it needs to be a value that can keep the output voltage at 1-3V for the bench setting. Then once i actually use it to detect the red flourescence the photocurrent will be lower hence the Rf needs to change to still keep the output voltage level 1 - 3V",
+          "The other test we need to do is find the proper shape for the resonator using many test PCB with different types of resonators and see which one resonates at 2.87GHz ~ +-30Mhz. I will be making a report with visuals and graphs of my findings with how changes in resonator shape affects the resonant frequency. The outcome of this test will provide the shape of the resonator that will go on the final stack. "
+        ],
+        images: [
+          {src: "assets/projects/strofi/Timeline/tia_test.png", title: "TIA Test Board"},,
+          {src: "assets/projects/strofi/Timeline/tia_test_pcb.png", title: "TIA Test Board PCB"},,
+        ]
+      },
       {
         date: "October 2026",
         title: "Reseaching Quantum Sensors and Sponsorhsip From Element Six",

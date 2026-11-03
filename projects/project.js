@@ -16,7 +16,7 @@ function wireAdaptiveTimelineImages(root) {
     const img = frame.querySelector("img");
     if (!img) return;
     const markIfWide = () => {
-      if (img.naturalWidth && img.naturalHeight && img.naturalWidth / img.naturalHeight > 1.2) {
+      if (img.naturalWidth && img.naturalHeight && img.naturalWidth / img.naturalHeight > 1.15) {
         frame.classList.add("wide");
       }
     };
